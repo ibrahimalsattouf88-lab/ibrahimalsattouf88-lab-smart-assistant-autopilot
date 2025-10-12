@@ -60,24 +60,27 @@ jobs:
           cd apps/control_panel
           flutter test
 
+      - name: Install Codemagic CLI
+        run: |
+          sudo snap install codemagic-cli --classic
+
       - name: Build and Deploy with Codemagic (Smart Assistant)
         if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
         run: |
-          # This step assumes Codemagic CLI is installed and configured.
-          # For now, we'll just print a placeholder command.
-          # In a real scenario, this would involve calling Codemagic API or CLI.
-          echo "Triggering Codemagic build for Smart Assistant App (Workflow ID: ${{ secrets.CODEMAGIC_WORKFLOW_ID }})"
-          # Example: codemagic-cli build start --workflow-id ${{ secrets.CODEMAGIC_WORKFLOW_ID }} --token ${{ secrets.CODEMAGIC_API_TOKEN }} --environment '{"BUILD_TYPE":"${{ github.event.inputs.build_type }}"}'
-          # Note: CODEMAGIC_WORKFLOW_ID needs to be specific to the app being built.
-          # This workflow will need to be refined once Codemagic setup is clearer.
+          codemagic-cli build start \
+            --workflow-id ${{ secrets.CODEMAGIC_SMART_ASSISTANT_WORKFLOW_ID }} \
+            --token ${{ secrets.CODEMAGIC_API_TOKEN }} \
+            --environment '{"BUILD_TYPE":"${{ github.event.inputs.build_type }}"}' \
+            --app-path apps/smart_assistant
 
       - name: Build and Deploy with Codemagic (Control Panel)
         if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
         run: |
-          echo "Triggering Codemagic build for Control Panel App (Workflow ID: ${{ secrets.CODEMAGIC_WORKFLOW_ID }})"
-          # Example: codemagic-cli build start --workflow-id ${{ secrets.CODEMAGIC_WORKFLOW_ID }} --token ${{ secrets.CODEMAGIC_API_TOKEN }} --environment '{"BUILD_TYPE":"${{ github.event.inputs.build_type }}"}'
-          # Note: CODEMAGIC_WORKFLOW_ID needs to be specific to the app being built.
-          # This workflow will need to be refined once Codemagic setup is clearer.
+          codemagic-cli build start \
+            --workflow-id ${{ secrets.CODEMAGIC_CONTROL_PANEL_WORKFLOW_ID }} \
+            --token ${{ secrets.CODEMAGIC_API_TOKEN }} \
+            --environment '{"BUILD_TYPE":"${{ github.event.inputs.build_type }}"}' \
+            --app-path apps/control_panel
 
       - name: Upload Build Artifacts (Placeholder)
         run: |
