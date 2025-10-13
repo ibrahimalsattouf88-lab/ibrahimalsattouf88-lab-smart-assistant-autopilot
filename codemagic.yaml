@@ -12,8 +12,8 @@ workflows:
       - |
         melos exec --scope="smart_assistant_new" -- \
         bash -c '
+          cd apps/smart_assistant_new # Explicitly change directory
           flutter pub get
-          # Ensure gradlew exists and is executable
           if [ ! -f android/gradlew ]; then
             echo "android/gradlew missing → regenerating Android/iOS";
             rm -rf android ios
@@ -45,8 +45,8 @@ workflows:
       - |
         melos exec --scope="control_panel_new" -- \
         bash -c '
+          cd apps/control_panel_new # Explicitly change directory
           flutter pub get
-          # Ensure gradlew exists and is executable
           if [ ! -f android/gradlew ]; then
             echo "android/gradlew missing → regenerating Android/iOS";
             rm -rf android ios
