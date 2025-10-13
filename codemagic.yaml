@@ -23,7 +23,7 @@ workflows:
           ./gradlew clean --no-daemon
       - name: Build Android
         script: |
-          flutter build apk --release
+          flutter build apk --release --project-directory=.
     artifacts:
       - build/app/outputs/**/*.apk
     publishing:
@@ -58,7 +58,7 @@ workflows:
           ./gradlew clean --no-daemon
       - name: Build Android
         script: |
-          flutter build apk --release
+          flutter build apk --release --project-directory=.
     artifacts:
       - build/app/outputs/**/*.apk
     publishing:
