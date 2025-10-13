@@ -13,7 +13,9 @@ workflows:
         melos exec --scope="smart_assistant_new" -- \
         bash -c '
           flutter pub get
+          # Ensure gradlew exists and is executable
           if [ ! -f android/gradlew ]; then
+            echo "android/gradlew missing → regenerating Android/iOS";
             rm -rf android ios
             flutter create .
             flutter pub get
@@ -44,7 +46,9 @@ workflows:
         melos exec --scope="control_panel_new" -- \
         bash -c '
           flutter pub get
+          # Ensure gradlew exists and is executable
           if [ ! -f android/gradlew ]; then
+            echo "android/gradlew missing → regenerating Android/iOS";
             rm -rf android ios
             flutter create .
             flutter pub get
