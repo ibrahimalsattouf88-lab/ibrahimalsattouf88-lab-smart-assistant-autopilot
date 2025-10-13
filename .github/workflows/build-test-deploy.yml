@@ -76,7 +76,7 @@ jobs:
         uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
         with:
           token: ${{ secrets.CODEMAGIC_API_TOKEN }}
-          app-id: ${{ secrets.CODEMAGIC_APP_ID_CONTROL_PANEL }}
+          app-id: ${{ secrets.CODEMAGIC_CONTROL_PANEL_ID }}
           workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}
           environment_variables: '{"BUILD_TYPE":"${{ github.event.inputs.build_type }}"}'
           # Note: The 'app_path' parameter is not directly supported by this action for triggering a specific workflow within a monorepo setup. 
