@@ -60,29 +60,27 @@ jobs:
           cd apps/control_panel
           flutter test
 
-      - name: Install Codemagic CLI
-        run: |
-          pip3 install codemagic-cli
-
-      - name: Build and Deploy with Codemagic (Smart Assistant)
+      - name: Trigger Codemagic Build (Smart Assistant)
         if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
-        run: |
-          codemagic-cli build start \
-            --app-id ${{ secrets.CODEMAGIC_APP_ID }} \
-            --workflow-id ${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }} \
-            --token ${{ secrets.CODEMAGIC_API_TOKEN }} \
-            --environment '{"BUILD_TYPE":"${{ github.event.inputs.build_type }}"}' \
-            --app-path apps/smart_assistant
+        uses: marketplace/actions/trigger-codemagic-workflow@v1
+        with:
+          api_token: ${{ secrets.CODEMAGIC_API_TOKEN }}
+          app_id: ${{ secrets.CODEMAGIC_APP_ID }}
+          workflow_id: ${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}
+          environment_variables: '{"BUILD_TYPE":"${{ github.event.inputs.build_type }}"}'
+          # Note: The 'app_path' parameter is not directly supported by this action for triggering a specific workflow within a monorepo setup. 
+          # The workflow itself in Codemagic should be configured to handle the correct app path.
 
-      - name: Build and Deploy with Codemagic (Control Panel)
+      - name: Trigger Codemagic Build (Control Panel)
         if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
-        run: |
-          codemagic-cli build start \
-            --app-id ${{ secrets.CODEMAGIC_APP_ID_CONTROL_PANEL }} \
-            --workflow-id ${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }} \
-            --token ${{ secrets.CODEMAGIC_API_TOKEN }} \
-            --environment '{"BUILD_TYPE":"${{ github.event.inputs.build_type }}"}' \
-            --app-path apps/control_panel
+        uses: marketplace/actions/trigger-codemagic-workflow@v1
+        with:
+          api_token: ${{ secrets.CODEMAGIC_API_TOKEN }}
+          app_id: ${{ secrets.CODEMAGIC_APP_ID_CONTROL_PANEL }}
+          workflow_id: ${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}
+          environment_variables: '{"BUILD_TYPE":"${{ github.event.inputs.build_type }}"}'
+          # Note: The 'app_path' parameter is not directly supported by this action for triggering a specific workflow within a monorepo setup. 
+          # The workflow itself in Codemagic should be configured to handle the correct app path.
 
       - name: Upload Build Artifacts (Placeholder)
         run: |
