@@ -6,6 +6,7 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: 1.16.2
+      java: 17
     triggering:
       events:
         - push
@@ -38,6 +39,7 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: 1.16.2
+      java: 17
     triggering:
       events:
         - push
