@@ -1,7 +1,7 @@
 workflows:
-  android_control_panel:
+  android-control-panel:
     name: Android Build (Control Panel)
-    working_directory: apps/control_panel_new
+    working_directory: apps/admin_console
     environment:
       flutter: stable
       xcode: latest
@@ -17,10 +17,17 @@ workflows:
     scripts:
       - name: Set up Flutter and Android
         script: |
+          # Ensure gradlew exists and has execute permissions
+          if [ ! -f "android/gradlew" ]; then
+            echo "gradlew not found, attempting to generate..."
+            flutter build apk --debug # This command usually generates gradlew
+          fi
+          chmod +x android/gradlew
+
           flutter clean
           flutter pub get
           flutter doctor -v
-          ./gradlew clean --no-daemon
+          android/gradlew clean --no-daemon
       - name: Build Android
         script: |
           flutter build apk --release
@@ -34,9 +41,9 @@ workflows:
           success: true
           failure: true
 
-  android_smart_assistant:
+  android-smart-assistant:
     name: Android Build (Smart Assistant)
-    working_directory: apps/smart_assistant_new
+    working_directory: apps/companion_app
     environment:
       flutter: stable
       xcode: latest
@@ -52,10 +59,17 @@ workflows:
     scripts:
       - name: Set up Flutter and Android
         script: |
+          # Ensure gradlew exists and has execute permissions
+          if [ ! -f "android/gradlew" ]; then
+            echo "gradlew not found, attempting to generate..."
+            flutter build apk --debug # This command usually generates gradlew
+          fi
+          chmod +x android/gradlew
+
           flutter clean
           flutter pub get
           flutter doctor -v
-          ./gradlew clean --no-daemon
+          android/gradlew clean --no-daemon
       - name: Build Android
         script: |
           flutter build apk --release
