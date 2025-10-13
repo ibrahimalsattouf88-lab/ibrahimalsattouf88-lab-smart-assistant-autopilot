@@ -10,19 +10,16 @@ workflows:
       - echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> $CM_ENV
       - melos bootstrap
       - |
-        melos exec --scope="smart_assistant_new" -- \
-        bash -c '
-          cd apps/smart_assistant_new # Explicitly change directory
+        cd apps/smart_assistant_new
+        flutter pub get
+        if [ ! -f android/gradlew ]; then
+          echo "android/gradlew missing → regenerating Android/iOS";
+          rm -rf android ios
+          flutter create .
           flutter pub get
-          if [ ! -f android/gradlew ]; then
-            echo "android/gradlew missing → regenerating Android/iOS";
-            rm -rf android ios
-            flutter create .
-            flutter pub get
-          fi
-          chmod +x android/gradlew || true
-          flutter build apk --release
-        '
+        fi
+        chmod +x android/gradlew || true
+        flutter build apk --release
     artifacts:
       - apps/smart_assistant_new/build/app/outputs/flutter-apk/*.apk
       - apps/smart_assistant_new/build/**/outputs/**/*.aab
@@ -43,19 +40,16 @@ workflows:
       - echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> $CM_ENV
       - melos bootstrap
       - |
-        melos exec --scope="control_panel_new" -- \
-        bash -c '
-          cd apps/control_panel_new # Explicitly change directory
+        cd apps/control_panel_new
+        flutter pub get
+        if [ ! -f android/gradlew ]; then
+          echo "android/gradlew missing → regenerating Android/iOS";
+          rm -rf android ios
+          flutter create .
           flutter pub get
-          if [ ! -f android/gradlew ]; then
-            echo "android/gradlew missing → regenerating Android/iOS";
-            rm -rf android ios
-            flutter create .
-            flutter pub get
-          fi
-          chmod +x android/gradlew || true
-          flutter build apk --release
-        '
+        fi
+        chmod +x android/gradlew || true
+        flutter build apk --release
     artifacts:
       - apps/control_panel_new/build/app/outputs/flutter-apk/*.apk
       - apps/control_panel_new/build/**/outputs/**/*.aab
