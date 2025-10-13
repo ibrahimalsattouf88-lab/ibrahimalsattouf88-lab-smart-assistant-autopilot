@@ -19,6 +19,8 @@ workflows:
         script: |
           flutter clean
           flutter pub get
+          flutter doctor
+          ./gradlew clean --no-daemon
       - name: Build Android
         script: |
           flutter build apk --release
@@ -52,6 +54,8 @@ workflows:
         script: |
           flutter clean
           flutter pub get
+          flutter doctor
+          ./gradlew clean --no-daemon
       - name: Build Android
         script: |
           flutter build apk --release
