@@ -1,69 +1,71 @@
 workflows:
-  android_smart_assistant:
-    name: Android (Smart Assistant)
-    environment:
-      flutter: stable
-    scripts:
-      - flutter --version
-      - dart --version || true
-      - dart pub global activate melos
-      - echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> $CM_ENV
-      - melos bootstrap # Run melos bootstrap from the root
-      - |
-        melos exec --scope="smart_assistant_new" -- \
-        bash -c '
-          cd apps/smart_assistant_new && \
-          flutter pub get && \
-          if [ ! -f android/gradlew ]; then \
-            echo "android/gradlew missing → regenerating Android/iOS"; \
-            rm -rf android ios; \
-            flutter create .; \
-            flutter pub get; \
-          fi; \
-          chmod +x android/gradlew || true; \
-          flutter build apk --release
-        '
-    artifacts:
-      - apps/smart_assistant_new/build/app/outputs/flutter-apk/*.apk
-      - apps/smart_assistant_new/build/**/outputs/**/*.aab
-    cache:
-      cache_paths:
-        - $FLUTTER_ROOT/.pub-cache
-        - .dart_tool
-        - apps/smart_assistant_new/.dart_tool
-        - apps/smart_assistant_new/build
-
   android_control_panel:
-    name: Android (Control Panel)
+    name: Android Build (Control Panel)
+    working_directory: apps/control_panel_new
     environment:
       flutter: stable
+      xcode: latest
+      cocoapods: 1.16.2
+      java: 17
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
     scripts:
-      - flutter --version
-      - dart --version || true
-      - dart pub global activate melos
-      - echo 'export PATH="$PATH:$HOME/.pub-cache/bin"' >> $CM_ENV
-      - melos bootstrap # Run melos bootstrap from the root
-      - |
-        melos exec --scope="control_panel_new" -- \
-        bash -c '
-          cd apps/control_panel_new && \
-          flutter pub get && \
-          if [ ! -f android/gradlew ]; then \
-            echo "android/gradlew missing → regenerating Android/iOS"; \
-            rm -rf android ios; \
-            flutter create .; \
-            flutter pub get; \
-          fi; \
-          chmod +x android/gradlew || true; \
+      - name: Set up Flutter and Android
+        script: |
+          flutter clean
+          flutter pub get
+          flutter doctor -v
+          ./gradlew clean --no-daemon
+      - name: Build Android
+        script: |
           flutter build apk --release
-        '
     artifacts:
-      - apps/control_panel_new/build/app/outputs/flutter-apk/*.apk
-      - apps/control_panel_new/build/**/outputs/**/*.aab
-    cache:
-      cache_paths:
-        - $FLUTTER_ROOT/.pub-cache
-        - .dart_tool
-        - apps/control_panel_new/.dart_tool
-        - apps/control_panel_new/build
+      - build/app/outputs/**/*.apk
+    publishing:
+      email:
+        recipients:
+          - ibrahimalsattouf88@gmail.com
+        notify:
+          success: true
+          failure: true
+
+  android_smart_assistant:
+    name: Android Build (Smart Assistant)
+    working_directory: apps/smart_assistant_new
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: 1.16.2
+      java: 17
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+          source: true
+    scripts:
+      - name: Set up Flutter and Android
+        script: |
+          flutter clean
+          flutter pub get
+          flutter doctor -v
+          ./gradlew clean --no-daemon
+      - name: Build Android
+        script: |
+          flutter build apk --release
+    artifacts:
+      - build/app/outputs/**/*.apk
+    publishing:
+      email:
+        recipients:
+          - ibrahimalsattouf88@gmail.com
+        notify: 
+          success: true
+          failure: true
 
