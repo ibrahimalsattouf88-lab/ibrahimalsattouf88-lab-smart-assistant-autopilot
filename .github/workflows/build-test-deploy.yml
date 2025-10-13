@@ -62,7 +62,7 @@ jobs:
 
       - name: Trigger Codemagic Build (Smart Assistant)
         if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
-        uses: marketplace/actions/trigger-codemagic-workflow@v1
+        uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v1
         with:
           api_token: ${{ secrets.CODEMAGIC_API_TOKEN }}
           app_id: ${{ secrets.CODEMAGIC_APP_ID }}
@@ -73,7 +73,7 @@ jobs:
 
       - name: Trigger Codemagic Build (Control Panel)
         if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
-        uses: marketplace/actions/trigger-codemagic-workflow@v1
+        uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v1
         with:
           api_token: ${{ secrets.CODEMAGIC_API_TOKEN }}
           app_id: ${{ secrets.CODEMAGIC_APP_ID_CONTROL_PANEL }}
