@@ -19,11 +19,11 @@ workflows:
         script: |
           flutter clean
           flutter pub get
-          flutter doctor
+          flutter doctor -v
           ./gradlew clean --no-daemon
       - name: Build Android
         script: |
-          flutter build apk --release --project-directory=.
+          flutter build apk --release
     artifacts:
       - build/app/outputs/**/*.apk
     publishing:
@@ -54,11 +54,11 @@ workflows:
         script: |
           flutter clean
           flutter pub get
-          flutter doctor
+          flutter doctor -v
           ./gradlew clean --no-daemon
       - name: Build Android
         script: |
-          flutter build apk --release --project-directory=.
+          flutter build apk --release
     artifacts:
       - build/app/outputs/**/*.apk
     publishing:
