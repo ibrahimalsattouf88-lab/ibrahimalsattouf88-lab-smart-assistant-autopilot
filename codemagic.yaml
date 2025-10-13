@@ -1,7 +1,7 @@
 workflows:
   smart-assistant-android-build:
     name: Smart Assistant Android Build
-    working_directory: apps/smart_assistant
+    working_directory: apps/smart_assistant_new
     environment:
       flutter: stable
       xcode: latest
@@ -33,7 +33,7 @@ workflows:
 
   control-panel-android-build:
     name: Control Panel Android Build
-    working_directory: apps/control_panel
+    working_directory: apps/control_panel_new
     environment:
       flutter: stable
       xcode: latest
