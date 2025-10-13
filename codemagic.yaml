@@ -1,7 +1,7 @@
 workflows:
   smart-assistant-android-build:
     name: Smart Assistant Android Build
-    working_directory: apps/smart_assistant_new
+    # working_directory: apps/smart_assistant_new # Melos will handle this
     environment:
       flutter: stable
       xcode: latest
@@ -15,17 +15,24 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: Set up Flutter
+      - name: Install Melos
         script: |
-          flutter clean
-          flutter pub get
-          flutter doctor -v
-          ./gradlew clean --no-daemon
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          flutter pub global activate melos
+          melos bootstrap
+      - name: Set up Flutter and Android
+        script: |
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          melos exec --scope=smart_assistant_new -- flutter clean
+          melos exec --scope=smart_assistant_new -- flutter pub get
+          melos exec --scope=smart_assistant_new -- flutter doctor -v
+          melos exec --scope=smart_assistant_new -- ./gradlew clean --no-daemon
       - name: Build Android
         script: |
-          flutter build apk --release
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          melos exec --scope=smart_assistant_new -- flutter build apk --release
     artifacts:
-      - build/app/outputs/**/*.apk
+      - apps/smart_assistant_new/build/app/outputs/**/*.apk
     publishing:
       email:
         recipients:
@@ -36,7 +43,7 @@ workflows:
 
   control-panel-android-build:
     name: Control Panel Android Build
-    working_directory: apps/control_panel_new
+    # working_directory: apps/control_panel_new # Melos will handle this
     environment:
       flutter: stable
       xcode: latest
@@ -50,17 +57,24 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: Set up Flutter
+      - name: Install Melos
         script: |
-          flutter clean
-          flutter pub get
-          flutter doctor -v
-          ./gradlew clean --no-daemon
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          flutter pub global activate melos
+          melos bootstrap
+      - name: Set up Flutter and Android
+        script: |
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          melos exec --scope=control_panel_new -- flutter clean
+          melos exec --scope=control_panel_new -- flutter pub get
+          melos exec --scope=control_panel_new -- flutter doctor -v
+          melos exec --scope=control_panel_new -- ./gradlew clean --no-daemon
       - name: Build Android
         script: |
-          flutter build apk --release
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          melos exec --scope=control_panel_new -- flutter build apk --release
     artifacts:
-      - build/app/outputs/**/*.apk
+      - apps/control_panel_new/build/app/outputs/**/*.apk
     publishing:
       email:
         recipients:
