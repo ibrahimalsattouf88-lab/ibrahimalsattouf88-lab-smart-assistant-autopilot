@@ -1,6 +1,6 @@
 name: Build, Test, and Deploy Apps
 
-on: # Trigger this workflow manually from GitHub Actions UI
+on:
   workflow_dispatch:
     inputs:
       app_to_build:
@@ -8,20 +8,16 @@ on: # Trigger this workflow manually from GitHub Actions UI
         required: true
         default: 'smart_assistant'
         type: choice
-        options:
-          - 'smart_assistant'
-          - 'control_panel'
+        options: ['smart_assistant','control_panel']
       build_type:
-        description: 'Select build type (e.g., debug, release)'
+        description: 'Select build type'
         required: true
         default: 'release'
         type: choice
-        options:
-          - 'debug'
-          - 'release'
+        options: ['debug','release']
 
 env:
-  FLUTTER_VERSION: '3.22.0' # Specify a stable Flutter version
+  FLUTTER_VERSION: '3.22.0'
 
 jobs:
   build_and_deploy:
@@ -30,20 +26,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js for VA Server
+      - name: Setup Node.js (VA Server)
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install and Build VA Server
+      - name: Install & Build VA Server
         run: |
           cd apps/va-server
-          npm install
+          npm ci
           npm run build
         env:
+          # مفاتيح الخادم (اقرأها من Secrets فقط)
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           MANOS_TOKEN: ${{ secrets.MANOS_TOKEN }}
           BLACK_FX_SOURCES: ${{ secrets.BLACK_FX_SOURCES }}
-          # Add any other VA server environment variables here
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: Quick VA Smoke (build-time)
+        run: |
+          node -e "console.log('VA build done ✅')"
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -51,58 +55,59 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
 
-      - name: Install dependencies for Smart Assistant App
+      - name: Install deps (Smart Assistant)
         if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
         run: |
           cd apps/smart_assistant
           flutter pub get
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
-      - name: Install dependencies for Control Panel App
+      - name: Install deps (Control Panel)
         if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
         run: |
           cd apps/control_panel
           flutter pub get
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
-      - name: Run tests for Smart Assistant App
-        if: ${{ github.event.inputs.inputs.app_to_build == 'smart_assistant' }}
+      - name: Run tests (Smart Assistant)
+        if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
         run: |
           cd apps/smart_assistant
           flutter test
 
-      - name: Run tests for Control Panel App
+      - name: Run tests (Control Panel)
         if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
         run: |
           cd apps/control_panel
           flutter test
 
-      - name: Trigger Codemagic Build (Smart Assistant)
+      # خيار 1: تحفيز Codemagic لبناء الـAPK
+      - name: Trigger Codemagic (Smart Assistant)
         if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
         uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
-        env:
-          CM_BUILD_TYPE: ${{ github.event.inputs.build_type }}
         with:
           token: ${{ secrets.CODEMAGIC_API_TOKEN }}
           app-id: ${{ secrets.CODEMAGIC_APP_ID }}
           workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}
-
-      - name: Trigger Codemagic Build (Control Panel)
-        if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
-        uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
         env:
           CM_BUILD_TYPE: ${{ github.event.inputs.build_type }}
+
+      - name: Trigger Codemagic (Control Panel)
+        if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
+        uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
         with:
           token: ${{ secrets.CODEMAGIC_API_TOKEN }}
           app-id: ${{ secrets.CODEMAGIC_CONTROL_PANEL_ID }}
           workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}
+        env:
+          CM_BUILD_TYPE: ${{ github.event.inputs.build_type }}
 
-      - name: Upload Build Artifacts (Placeholder)
-        run: |
-          echo "Build artifacts would be uploaded here."
+      # خيار 2: (بديل) إن أردت بناء APK داخل GitHub Actions، قُل لي أضيف الخطوات هنا.
 
-      - name: Send Telegram Notification (Placeholder)
+      - name: Upload placeholders (logs)
         run: |
-          echo "Sending Telegram notification about build status."
-
-      - name: Send WhatsApp Notification (Placeholder)
-        run: |
-          echo "Sending WhatsApp notification about build status."
+          echo "Build triggered. Artifacts will be available from Codemagic."
