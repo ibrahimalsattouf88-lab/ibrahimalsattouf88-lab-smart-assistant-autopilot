@@ -30,6 +30,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Node.js for VA Server
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install and Build VA Server
+        run: |
+          cd apps/va-server
+          npm install
+          npm run build
+        env:
+          MANOS_TOKEN: ${{ secrets.MANOS_TOKEN }}
+          BLACK_FX_SOURCES: ${{ secrets.BLACK_FX_SOURCES }}
+          # Add any other VA server environment variables here
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -49,7 +64,7 @@ jobs:
           flutter pub get
 
       - name: Run tests for Smart Assistant App
-        if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
+        if: ${{ github.event.inputs.inputs.app_to_build == 'smart_assistant' }}
         run: |
           cd apps/smart_assistant
           flutter test
@@ -91,4 +106,3 @@ jobs:
       - name: Send WhatsApp Notification (Placeholder)
         run: |
           echo "Sending WhatsApp notification about build status."
-
