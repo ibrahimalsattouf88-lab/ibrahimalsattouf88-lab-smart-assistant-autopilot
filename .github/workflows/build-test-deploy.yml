@@ -26,18 +26,42 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Decide app directory
+        id: appdir
+        run: |
+          set -e
+          # غيّر القيم التالية إذا أسماء مجلداتك مختلفة
+          SA1="apps/smart_assistant"
+          SA2="apps/smart-assistant-app"
+          CP1="apps/control_panel"
+          CP2="apps/control-panel"
+
+          if [ "${{ github.event.inputs.app_to_build }}" = "smart_assistant" ]; then
+            for d in "$SA1" "$SA2"; do
+              if [ -d "$d" ]; then echo "dir=$d" >> $GITHUB_OUTPUT; exit 0; fi
+            done
+            echo "::error::لم أجد مجلد تطبيق Smart Assistant. أنشئ واحداً من: $SA1 أو $SA2"
+            exit 1
+          else
+            for d in "$CP1" "$CP2"; do
+              if [ -d "$d" ]; then echo "dir=$d" >> $GITHUB_OUTPUT; exit 0; fi
+            done
+            echo "::error::لم أجد مجلد تطبيق Control Panel. أنشئ واحداً من: $CP1 أو $CP2"
+            exit 1
+          fi
+
       - name: Setup Node.js (VA Server)
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install & Build VA Server
+        working-directory: apps/va-server
         run: |
-          cd apps/va-server
-          npm ci
+          set -euxo pipefail
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
           npm run build
         env:
-          # مفاتيح الخادم (اقرأها من Secrets فقط)
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
@@ -46,8 +70,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Quick VA Smoke (build-time)
-        run: |
-          node -e "console.log('VA build done ✅')"
+        run: node -e "console.log('VA build done ✅')"
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -55,37 +78,23 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
 
-      - name: Install deps (Smart Assistant)
-        if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
+      - name: Flutter pub get
+        working-directory: ${{ steps.appdir.outputs.dir }}
         run: |
-          cd apps/smart_assistant
+          set -euxo pipefail
+          flutter --version
           flutter pub get
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
-      - name: Install deps (Control Panel)
-        if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
+      - name: Flutter tests
+        working-directory: ${{ steps.appdir.outputs.dir }}
         run: |
-          cd apps/control_panel
-          flutter pub get
-        env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-
-      - name: Run tests (Smart Assistant)
-        if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
-        run: |
-          cd apps/smart_assistant
+          set -euxo pipefail
           flutter test
 
-      - name: Run tests (Control Panel)
-        if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
-        run: |
-          cd apps/control_panel
-          flutter test
-
-      # خيار 1: تحفيز Codemagic لبناء الـAPK
+      # خيار Codemagic
       - name: Trigger Codemagic (Smart Assistant)
         if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
         uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
@@ -106,8 +115,7 @@ jobs:
         env:
           CM_BUILD_TYPE: ${{ github.event.inputs.build_type }}
 
-      # خيار 2: (بديل) إن أردت بناء APK داخل GitHub Actions، قُل لي أضيف الخطوات هنا.
+      # (اختياري) لو بدك نبني APK هنا بدل Codemagic، خبرني أضيف الخطوات.
 
-      - name: Upload placeholders (logs)
-        run: |
-          echo "Build triggered. Artifacts will be available from Codemagic."
+      - name: Done
+        run: echo "Workflow finished. Check Codemagic for APK artifact."
