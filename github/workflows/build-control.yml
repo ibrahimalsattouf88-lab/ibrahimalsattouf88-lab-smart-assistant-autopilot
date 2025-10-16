@@ -1,0 +1,13 @@
+
+name: Build Control Panel (Codemagic)
+on: { workflow_dispatch: {} }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Codemagic
+        uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
+        with:
+          token: ${{ secrets.CODEMAGIC_API_TOKEN }}
+          app-id: ${{ secrets.CODEMAGIC_APP_ID_CONTROL }}
+          workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL }}
