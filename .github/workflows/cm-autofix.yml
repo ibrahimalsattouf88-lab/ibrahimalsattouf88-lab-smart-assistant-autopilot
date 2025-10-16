@@ -1,4 +1,4 @@
-name: Codemagic AutoFix (L3 only)
+name: Codemagic AutoFix (L1-L4)
 
 on:
   workflow_dispatch:
@@ -7,6 +7,10 @@ on:
         description: 'smart or control'
         required: true
         default: 'smart'
+      level:
+        description: 'AutoFix Level (L1,L2,L3,L4)'
+        required: true
+        default: 'L4'
 
 jobs:
   autofix:
@@ -45,29 +49,71 @@ jobs:
           git config user.name "autopilot"
           git config user.email "autopilot@${{ env.ORG }}"
 
-      - name: L3 fix (embedding v2)
+      - name: L1 clean (optional)
+        if: ${{ contains('L1,L2,L3,L4', github.event.inputs.level) }}
         run: |
-          set -e
           cd target
+          (flutter --version >/dev/null 2>&1 && flutter clean) || true
 
-          # MainActivity.java
+      - name: L2 Gradle sanity (optional)
+        if: ${{ contains('L2,L3,L4', github.event.inputs.level) }}
+        run: |
+          cd target
+          sed -i 's/compileSdk [0-9][0-9]*/compileSdk 34/g' android/app/build.gradle || true
+          sed -i 's/minSdk [0-9][0-9]*/minSdk 24/g' android/app/build.gradle || true
+          if [ -f android/app/build.gradle ] && ! grep -q 'androidx.multidex:multidex' android/app/build.gradle 2>/dev/null; then
+            awk '/dependencies *\{/{print;print "    implementation \"androidx.multidex:multidex:2.0.1\"";next}1' android/app/build.gradle > __g && mv __g android/app/build.gradle
+          fi
+          # ملفات أساسية لو ناقصة
+          mkdir -p android/gradle/wrapper
+          [ -f android/gradle/wrapper/gradle-wrapper.properties ] || cat > android/gradle/wrapper/gradle-wrapper.properties <<'P'
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.7-all.zip
+P
+          [ -f android/gradle.properties ] || cat > android/gradle.properties <<'P'
+org.gradle.jvmargs=-Xmx4G
+android.useAndroidX=true
+android.enableJetifier=true
+P
+
+      - name: L3 Embedding v2 (optional)
+        if: ${{ contains('L3,L4', github.event.inputs.level) }}
+        run: |
+          cd target
           PKG="${{ steps.v.outputs.pkg }}"
           JAVA_DIR="android/app/src/main/java/$(echo "$PKG" | tr '.' '/')"
           mkdir -p "$JAVA_DIR"
           printf "package %s;\n\nimport io.flutter.embedding.android.FlutterActivity;\n\npublic class MainActivity extends FlutterActivity { }\n" "$PKG" > "$JAVA_DIR/MainActivity.java"
-
-          # Gradle sanity
-          sed -i 's/compileSdk [0-9][0-9]*/compileSdk 34/g' android/app/build.gradle || true
-          sed -i 's/minSdk [0-9][0-9]*/minSdk 24/g' android/app/build.gradle || true
-          if ! grep -q 'androidx.multidex:multidex' android/app/build.gradle 2>/dev/null; then
-            awk '/dependencies *\{/{print;print "    implementation \"androidx.multidex:multidex:2.0.1\"";next}1' android/app/build.gradle > __g && mv __g android/app/build.gradle
-          fi
-
-          # AndroidManifest.xml: add <meta-data ... flutterEmbedding=2 />
           M="android/app/src/main/AndroidManifest.xml"
-          if ! grep -q 'flutterEmbedding' "$M"; then
+          if [ -f "$M" ] && ! grep -q 'flutterEmbedding' "$M"; then
             awk 'BEGIN{done=0} /<application/{print; if(!done){print "        <meta-data android:name=\"flutterEmbedding\" android:value=\"2\" />"; done=1; next} } {print}' "$M" > __m && mv __m "$M"
           fi
+
+      - name: L4 Fix Codemagic prebuild (auto-repair Android dir)
+        if: ${{ contains('L4', github.event.inputs.level) }}
+        run: |
+          cd target
+          # أضف خطوة إصلاح قبل البناء في codemagic.yaml
+          CM="codemagic.yaml"
+          if [ -f "$CM" ] && ! grep -q 'Repair Android project' "$CM"; then
+            awk '
+              /scripts:/ && !added { 
+                print; 
+                print "      - name: Repair Android project";
+                print "        script: |";
+                print "          if [ ! -f android/settings.gradle ] || [ ! -f android/app/build.gradle ]; then";
+                print "            flutter create .";
+                print "          fi";
+                added=1; next 
+              }1
+            ' "$CM" > __cm && mv __cm "$CM"
+          fi
+          # إنشاء ملفات دنيا إن كانت مفقودة لتسمح للـflutter create يكمل على Codemagic
+          [ -f android/settings.gradle ] || echo "include ':app'" > android/settings.gradle
+          mkdir -p android/app/src/main
 
       - name: Commit & push
         run: |
@@ -76,7 +122,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "no changes"
           else
-            git commit -m "AutoFix L3: migrate to Flutter embedding v2"
+            git commit -m "AutoFix ${ { github.event.inputs.level } }: Android structure & Codemagic prebuild repair"
             git push origin main
           fi
 
