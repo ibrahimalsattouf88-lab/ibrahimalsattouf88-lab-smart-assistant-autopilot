@@ -1,5 +1,0 @@
-name: smart_assistant_autopilot
-packages:
-  - apps/smart_assistant_new
-  - apps/control_panel_new
-
