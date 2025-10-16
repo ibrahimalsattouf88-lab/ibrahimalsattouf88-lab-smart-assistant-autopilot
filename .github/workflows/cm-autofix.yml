@@ -10,96 +10,118 @@ on:
       level:
         description: 'AutoFix Level (L1, L2, L3)'
         required: true
-        default: 'L1'
+        default: 'L3'
 
 jobs:
   autofix:
     runs-on: ubuntu-latest
+    env:
+      ORG: ibrahimalsattouf88-lab
     steps:
       - uses: actions/checkout@v4
 
       - name: Prepare variables
         id: vars
+        shell: bash
         run: |
           if [ "${{ github.event.inputs.app }}" = "smart" ]; then
-            REPO="smart-assistant-app"
-            PKG="com.example.smartassistant"
+            echo "repo=smart-assistant-app" >> $GITHUB_OUTPUT
+            echo "pkg=com.example.smartassistant" >> $GITHUB_OUTPUT
+            echo "wf=${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}" >> $GITHUB_OUTPUT
           else
-            REPO="control-panel-app"
-            PKG="com.example.controlpanel"
+            echo "repo=control-panel-app" >> $GITHUB_OUTPUT
+            echo "pkg=com.example.controlpanel" >> $GITHUB_OUTPUT
+            echo "wf=${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}" >> $GITHUB_OUTPUT
           fi
-          echo "repo=$REPO" >> $GITHUB_OUTPUT
-          echo "pkg=$PKG" >> $GITHUB_OUTPUT
 
-      - name: Clone target repository
+      - name: Pick push token
+        id: token
+        shell: bash
         run: |
-          git clone https://github.com/ibrahimalsattouf88-lab/${{ steps.vars.outputs.repo }}.git target
+          if [ -n "${{ secrets.GIT_PUSH_TOKEN }}" ]; then
+            echo "token=${{ secrets.GIT_PUSH_TOKEN }}" >> $GITHUB_OUTPUT
+          else
+            echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Clone target repository (write)
+        shell: bash
+        run: |
+          git clone https://x-access-token:${{ steps.token.outputs.token }}@github.com/${{ env.ORG }}/${{ steps.vars.outputs.repo }}.git target
           cd target
           git config user.name "autopilot"
-          git config user.email "autopilot@ibrahimalsattouf88-lab"
-          echo "✅ Cloned ${{ steps.vars.outputs.repo }}"
+          git config user.email "autopilot@${{ env.ORG }}"
 
-      - name: Run AutoFix based on level
+      - name: Run AutoFix
+        shell: bash
         run: |
+          set -e
           cd target
+          echo "=== AutoFix Level: ${{ github.event.inputs.level }} on ${{ steps.vars.outputs.repo }} ==="
 
-          echo "=== Running AutoFix Level: ${{ github.event.inputs.level }} ==="
-
-          # L1 - basic cleanup
-          if [ "${{ github.event.inputs.level }}" = "L1" ]; then
-            flutter pub cache repair || true
-            flutter clean || true
-            flutter pub get || true
+          if [ "${{ github.event.inputs.level }}" = "L1" ] || [ "${{ github.event.inputs.level }}" = "L2" ] || [ "${{ github.event.inputs.level }}" = "L3" ]; then
+            # basic cleanup
+            (flutter --version >/dev/null 2>&1 && flutter clean || true)
           fi
 
-          # L2 - Gradle/SDK adjustments
-          if [ "${{ github.event.inputs.level }}" = "L2" ]; then
-            sed -i 's/compileSdk [0-9]\\+/compileSdk 34/g' android/app/build.gradle || true
-            sed -i 's/minSdk [0-9]\\+/minSdk 24/g' android/app/build.gradle || true
-            grep -q 'multidex' android/app/build.gradle || \
-              sed -i '/dependencies {/a \ \ implementation "androidx.multidex:multidex:2.0.1"' android/app/build.gradle
-            echo "[AutoFix] Adjusted Gradle/SDK values."
-          fi
-
-          # L3 - Flutter embedding migration
-          if [ "${{ github.event.inputs.level }}" = "L3" ]; then
-            cd android/app/src/main
-            mkdir -p java/$(echo "${{ steps.vars.outputs.pkg }}" | tr '.' '/')
-            cat > java/$(echo "${{ steps.vars.outputs.pkg }}" | tr '.' '/')/MainActivity.java <<JAVA
-            package ${{ steps.vars.outputs.pkg }};
-
-            import io.flutter.embedding.android.FlutterActivity;
-
-            public class MainActivity extends FlutterActivity { }
-            JAVA
-
-            cd ../..
-            MANIFEST="app/src/main/AndroidManifest.xml"
-            if ! grep -q 'flutterEmbedding' "$MANIFEST"; then
-              sed -i '/<application/a \ \ <meta-data android:name="flutterEmbedding" android:value="2" />' "$MANIFEST"
-              echo "[AutoFix] Added flutterEmbedding meta-data."
+          if [ "${{ github.event.inputs.level }}" = "L2" ] || [ "${{ github.event.inputs.level }}" = "L3" ]; then
+            # Gradle/SDK sanity
+            sed -i 's/compileSdk \([0-9]\+\)/compileSdk 34/g' android/app/build.gradle || true
+            sed -i 's/minSdk \([0-9]\+\)/minSdk 24/g' android/app/build.gradle || true
+            if ! grep -q 'androidx.multidex:multidex' android/app/build.gradle 2>/dev/null; then
+              awk '
+                /dependencies[[:space:]]*{/ && !added { print; print "    implementation \"androidx.multidex:multidex:2.0.1\""; added=1; next }
+                { print }
+              ' android/app/build.gradle > __tmp.gradle && mv __tmp.gradle android/app/build.gradle
             fi
-            echo "[AutoFix] Ensured Flutter embedding v2."
           fi
 
-      - name: Commit and push fixes
+          if [ "${{ github.event.inputs.level }}" = "L3" ]; then
+            # Ensure Flutter v2 embedding (MainActivity + manifest meta-data)
+            PKG="${{ steps.vars.outputs.pkg }}"
+            JAVA_PATH="android/app/src/main/java/$(echo "$PKG" | tr '.' '/')"
+            mkdir -p "$JAVA_PATH"
+
+            cat > "$JAVA_PATH/MainActivity.java" <<'JAVA'
+package __PKG__;
+
+import io.flutter.embedding.android.FlutterActivity;
+
+public class MainActivity extends FlutterActivity { }
+JAVA
+            sed -i "s|__PKG__|${PKG}|g" "$JAVA_PATH/MainActivity.java"
+
+            MANIFEST="android/app/src/main/AndroidManifest.xml"
+            if ! grep -q 'flutterEmbedding' "$MANIFEST"; then
+              # حقن داخل <application>
+              awk '
+                BEGIN{done=0}
+                /<application/ && done==0 { print; print "        <meta-data android:name=\"flutterEmbedding\" android:value=\"2\" />"; done=1; next }
+                { print }
+              ' "$MANIFEST" > __tmp_manifest.xml && mv __tmp_manifest.xml "$MANIFEST"
+            fi
+          fi
+
+      - name: Commit & push fixes (if any)
+        shell: bash
         run: |
           cd target
-          git add .
-          git commit -m "AutoFix ${{ github.event.inputs.level }} applied by autopilot"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/ibrahimalsattouf88-lab/${{ steps.vars.outputs.repo }}.git main
-          echo "✅ Pushed fixed code to ${{ steps.vars.outputs.repo }}"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "AutoFix ${{ github.event.inputs.level }}: Android embedding/gradle fixes"
+            git push origin main
+          fi
 
       - name: Trigger Codemagic rebuild
+        shell: bash
         run: |
           APP_ID="${{ secrets.CODEMAGIC_APP_ID }}"
-          WF_SMART="${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}"
-          WF_CTRL="${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}"
+          WF="${{ steps.vars.outputs.wf }}"
           TOKEN="${{ secrets.CODEMAGIC_API_TOKEN }}"
-          WF="$WF_SMART"
-          if [ "${{ github.event.inputs.app }}" = "control" ]; then WF="$WF_CTRL"; fi
           curl -sS -X POST https://api.codemagic.io/builds \
             -H "x-auth-token: $TOKEN" \
             -H "Content-Type: application/json" \
-            -d "{ \"appId\": \"$APP_ID\", \"workflowId\": \"$WF\", \"branch\": \"main\" }"
-          echo "🚀 Triggered Codemagic build for ${{ github.event.inputs.app }}"
+            -d "{ \"appId\": \"${APP_ID}\", \"workflowId\": \"${WF}\", \"branch\": \"main\" }"
+          echo "🚀 Triggered Codemagic rebuild for ${{ steps.vars.outputs.repo }}"
