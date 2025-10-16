@@ -1,0 +1,48 @@
+
+name: Build, Test, and Deploy Apps
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_to_build:
+        description: 'Select which app to build'
+        required: true
+        default: 'smart_assistant'
+        type: choice
+        options: ['smart_assistant','control_panel']
+      build_type:
+        description: 'Select build type'
+        required: true
+        default: 'release'
+        type: choice
+        options: ['debug','release']
+
+jobs:
+  codemagic_only:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Trigger Codemagic (Smart Assistant)
+        if: ${{ github.event.inputs.app_to_build == 'smart_assistant' }}
+        uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
+        with:
+          token: ${{ secrets.CODEMAGIC_API_TOKEN }}
+          app-id: ${{ secrets.CODEMAGIC_APP_ID }}
+          workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}
+        env:
+          CM_BUILD_TYPE: ${{ github.event.inputs.build_type }}
+
+      - name: Trigger Codemagic (Control Panel)
+        if: ${{ github.event.inputs.app_to_build == 'control_panel' }}
+        uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
+        with:
+          token: ${{ secrets.CODEMAGIC_API_TOKEN }}
+          app-id: ${{ secrets.CODEMAGIC_CONTROL_PANEL_ID }}
+          workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}
+        env:
+          CM_BUILD_TYPE: ${{ github.event.inputs.build_type }}
+
+      - name: Done
+        run: echo "Triggered Codemagic. APK artifact is in Codemagic."

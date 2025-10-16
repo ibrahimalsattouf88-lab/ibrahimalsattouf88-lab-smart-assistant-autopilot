@@ -1,0 +1,31 @@
+
+name: Codemagic AutoFix
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'smart|control'
+        required: true
+        default: 'smart'
+      level:
+        description: 'L1|L2 (auto)'
+        required: true
+        default: 'L1'
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Decide & Trigger
+        run: |
+          echo "AutoFix ${{ inputs.level }} for ${{ inputs.app }}"
+          # Re-trigger Codemagic via API (token secret required)
+          APP_ID="${{ secrets.CODEMAGIC_APP_ID }}"
+          WF_SMART="${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}"
+          WF_CTRL="${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}"
+          TOKEN="${{ secrets.CODEMAGIC_API_TOKEN }}"
+          WF="$WF_SMART"
+          if [ "${{ inputs.app }}" = "control" ]; then WF="$WF_CTRL"; fi
+          curl -sS -X POST https://api.codemagic.io/builds             -H "x-auth-token: $TOKEN" -H "Content-Type: application/json"             -d "{ \"appId\": \"$APP_ID\", \"workflowId\": \"$WF\", \"branch\": \"main\", \"environment\": { \"variables\": { \"CM_AUTOFIX_LEVEL\": \"${{ inputs.level }}\" } } }"
