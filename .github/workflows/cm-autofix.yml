@@ -1,0 +1,88 @@
+name: Codemagic AutoFix (L3 only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'smart or control'
+        required: true
+        default: 'smart'
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    env:
+      ORG: ibrahimalsattouf88-lab
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Vars
+        id: v
+        run: |
+          if [ "${{ github.event.inputs.app }}" = "smart" ]; then
+            echo "repo=smart-assistant-app" >> $GITHUB_OUTPUT
+            echo "pkg=com.example.smartassistant" >> $GITHUB_OUTPUT
+            echo "wf=${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}" >> $GITHUB_OUTPUT
+          else
+            echo "repo=control-panel-app" >> $GITHUB_OUTPUT
+            echo "pkg=com.example.controlpanel" >> $GITHUB_OUTPUT
+            echo "wf=${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Pick token
+        id: t
+        run: |
+          if [ -n "${{ secrets.GIT_PUSH_TOKEN }}" ]; then
+            echo "token=${{ secrets.GIT_PUSH_TOKEN }}" >> $GITHUB_OUTPUT
+          else
+            echo "token=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Clone target (write)
+        run: |
+          git clone "https://x-access-token:${{ steps.t.outputs.token }}@github.com/${{ env.ORG }}/${{ steps.v.outputs.repo }}.git" target
+          cd target
+          git config user.name "autopilot"
+          git config user.email "autopilot@${{ env.ORG }}"
+
+      - name: L3 fix (embedding v2)
+        run: |
+          set -e
+          cd target
+
+          # MainActivity.java
+          PKG="${{ steps.v.outputs.pkg }}"
+          JAVA_DIR="android/app/src/main/java/$(echo "$PKG" | tr '.' '/')"
+          mkdir -p "$JAVA_DIR"
+          printf "package %s;\n\nimport io.flutter.embedding.android.FlutterActivity;\n\npublic class MainActivity extends FlutterActivity { }\n" "$PKG" > "$JAVA_DIR/MainActivity.java"
+
+          # Gradle sanity
+          sed -i 's/compileSdk [0-9][0-9]*/compileSdk 34/g' android/app/build.gradle || true
+          sed -i 's/minSdk [0-9][0-9]*/minSdk 24/g' android/app/build.gradle || true
+          if ! grep -q 'androidx.multidex:multidex' android/app/build.gradle 2>/dev/null; then
+            awk '/dependencies *\{/{print;print "    implementation \"androidx.multidex:multidex:2.0.1\"";next}1' android/app/build.gradle > __g && mv __g android/app/build.gradle
+          fi
+
+          # AndroidManifest.xml: add <meta-data ... flutterEmbedding=2 />
+          M="android/app/src/main/AndroidManifest.xml"
+          if ! grep -q 'flutterEmbedding' "$M"; then
+            awk 'BEGIN{done=0} /<application/{print; if(!done){print "        <meta-data android:name=\"flutterEmbedding\" android:value=\"2\" />"; done=1; next} } {print}' "$M" > __m && mv __m "$M"
+          fi
+
+      - name: Commit & push
+        run: |
+          cd target
+          git add -A
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "AutoFix L3: migrate to Flutter embedding v2"
+            git push origin main
+          fi
+
+      - name: Trigger Codemagic
+        run: |
+          curl -sS -X POST https://api.codemagic.io/builds \
+            -H "x-auth-token: ${{ secrets.CODEMAGIC_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{ \"appId\": \"${{ secrets.CODEMAGIC_APP_ID }}\", \"workflowId\": \"${{ steps.v.outputs.wf }}\", \"branch\": \"main\" }"
