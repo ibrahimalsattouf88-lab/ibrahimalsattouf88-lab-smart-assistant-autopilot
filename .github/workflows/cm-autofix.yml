@@ -1,15 +1,14 @@
-
-name: Codemagic AutoFix
+name: Codemagic AutoFix (Full L1-L3)
 
 on:
   workflow_dispatch:
     inputs:
       app:
-        description: 'smart|control'
+        description: 'smart or control'
         required: true
         default: 'smart'
       level:
-        description: 'L1|L2 (auto)'
+        description: 'AutoFix Level (L1, L2, L3)'
         required: true
         default: 'L1'
 
@@ -18,14 +17,89 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Decide & Trigger
+
+      - name: Prepare variables
+        id: vars
         run: |
-          echo "AutoFix ${{ inputs.level }} for ${{ inputs.app }}"
-          # Re-trigger Codemagic via API (token secret required)
+          if [ "${{ github.event.inputs.app }}" = "smart" ]; then
+            REPO="smart-assistant-app"
+            PKG="com.example.smartassistant"
+          else
+            REPO="control-panel-app"
+            PKG="com.example.controlpanel"
+          fi
+          echo "repo=$REPO" >> $GITHUB_OUTPUT
+          echo "pkg=$PKG" >> $GITHUB_OUTPUT
+
+      - name: Clone target repository
+        run: |
+          git clone https://github.com/ibrahimalsattouf88-lab/${{ steps.vars.outputs.repo }}.git target
+          cd target
+          git config user.name "autopilot"
+          git config user.email "autopilot@ibrahimalsattouf88-lab"
+          echo "✅ Cloned ${{ steps.vars.outputs.repo }}"
+
+      - name: Run AutoFix based on level
+        run: |
+          cd target
+
+          echo "=== Running AutoFix Level: ${{ github.event.inputs.level }} ==="
+
+          # L1 - basic cleanup
+          if [ "${{ github.event.inputs.level }}" = "L1" ]; then
+            flutter pub cache repair || true
+            flutter clean || true
+            flutter pub get || true
+          fi
+
+          # L2 - Gradle/SDK adjustments
+          if [ "${{ github.event.inputs.level }}" = "L2" ]; then
+            sed -i 's/compileSdk [0-9]\\+/compileSdk 34/g' android/app/build.gradle || true
+            sed -i 's/minSdk [0-9]\\+/minSdk 24/g' android/app/build.gradle || true
+            grep -q 'multidex' android/app/build.gradle || \
+              sed -i '/dependencies {/a \ \ implementation "androidx.multidex:multidex:2.0.1"' android/app/build.gradle
+            echo "[AutoFix] Adjusted Gradle/SDK values."
+          fi
+
+          # L3 - Flutter embedding migration
+          if [ "${{ github.event.inputs.level }}" = "L3" ]; then
+            cd android/app/src/main
+            mkdir -p java/$(echo "${{ steps.vars.outputs.pkg }}" | tr '.' '/')
+            cat > java/$(echo "${{ steps.vars.outputs.pkg }}" | tr '.' '/')/MainActivity.java <<JAVA
+            package ${{ steps.vars.outputs.pkg }};
+
+            import io.flutter.embedding.android.FlutterActivity;
+
+            public class MainActivity extends FlutterActivity { }
+            JAVA
+
+            cd ../..
+            MANIFEST="app/src/main/AndroidManifest.xml"
+            if ! grep -q 'flutterEmbedding' "$MANIFEST"; then
+              sed -i '/<application/a \ \ <meta-data android:name="flutterEmbedding" android:value="2" />' "$MANIFEST"
+              echo "[AutoFix] Added flutterEmbedding meta-data."
+            fi
+            echo "[AutoFix] Ensured Flutter embedding v2."
+          fi
+
+      - name: Commit and push fixes
+        run: |
+          cd target
+          git add .
+          git commit -m "AutoFix ${{ github.event.inputs.level }} applied by autopilot"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/ibrahimalsattouf88-lab/${{ steps.vars.outputs.repo }}.git main
+          echo "✅ Pushed fixed code to ${{ steps.vars.outputs.repo }}"
+
+      - name: Trigger Codemagic rebuild
+        run: |
           APP_ID="${{ secrets.CODEMAGIC_APP_ID }}"
           WF_SMART="${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}"
           WF_CTRL="${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}"
           TOKEN="${{ secrets.CODEMAGIC_API_TOKEN }}"
           WF="$WF_SMART"
-          if [ "${{ inputs.app }}" = "control" ]; then WF="$WF_CTRL"; fi
-          curl -sS -X POST https://api.codemagic.io/builds             -H "x-auth-token: $TOKEN" -H "Content-Type: application/json"             -d "{ \"appId\": \"$APP_ID\", \"workflowId\": \"$WF\", \"branch\": \"main\", \"environment\": { \"variables\": { \"CM_AUTOFIX_LEVEL\": \"${{ inputs.level }}\" } } }"
+          if [ "${{ github.event.inputs.app }}" = "control" ]; then WF="$WF_CTRL"; fi
+          curl -sS -X POST https://api.codemagic.io/builds \
+            -H "x-auth-token: $TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{ \"appId\": \"$APP_ID\", \"workflowId\": \"$WF\", \"branch\": \"main\" }"
+          echo "🚀 Triggered Codemagic build for ${{ github.event.inputs.app }}"
