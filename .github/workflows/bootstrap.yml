@@ -1,0 +1,63 @@
+name: Bootstrap Autopilot
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clean repository
+        run: |
+          shopt -s dotglob
+          rm -rf -- * || true
+          mkdir -p .github/workflows
+
+      - name: Write workflows for Codemagic
+        run: |
+          cat > .github/workflows/build-smart.yml <<'YML'
+          name: Build Smart (Codemagic)
+          on: { workflow_dispatch: {} }
+          jobs:
+            call_codemagic:
+              runs-on: ubuntu-latest
+              steps:
+                - name: Trigger Codemagic build (Smart)
+                  uses: distributhor/workflow-webhook@v3
+                  with:
+                    url: https://api.codemagic.io/builds
+                    method: POST
+                    headers: |
+                      x-auth-token: ${{ secrets.CODEMAGIC_API_TOKEN }}
+                      Content-Type: application/json
+                    data: |
+                      {"appId":"${{ secrets.CODEMAGIC_APP_ID_SMART }}","workflowId":"${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART }}" }
+          YML
+
+          cat > .github/workflows/build-control.yml <<'YML'
+          name: Build Control (Codemagic)
+          on: { workflow_dispatch: {} }
+          jobs:
+            call_codemagic:
+              runs-on: ubuntu-latest
+              steps:
+                - name: Trigger Codemagic build (Control)
+                  uses: distributhor/workflow-webhook@v3
+                  with:
+                    url: https://api.codemagic.io/builds
+                    method: POST
+                    headers: |
+                      x-auth-token: ${{ secrets.CODEMAGIC_API_TOKEN }}
+                      Content-Type: application/json
+                    data: |
+                      {"appId":"${{ secrets.CODEMAGIC_APP_ID_CONTROL }}","workflowId":"${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL }}" }
+          YML
+
+      - name: Commit files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "bootstrap: Autopilot workflows v3.1"
