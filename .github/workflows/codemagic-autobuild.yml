@@ -7,68 +7,51 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  verify-codemagic-token:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Verify Codemagic token (and team access)
+      - name: Verify Codemagic Token
         env:
           CM_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
           CM_TEAM:  ${{ secrets.CODEMAGIC_TEAM_ID }}
         run: |
-          set -e
+          echo "🔍 Checking token access..."
           curl -sSf https://api.codemagic.io/me \
             -H "x-auth-token: $CM_TOKEN" \
-            -H "x-team-id: $CM_TEAM" >/dev/null
-          echo "Token + team OK"
+            -H "x-team-id: $CM_TEAM" | jq .
 
-      - name: Trigger smart-assistant build
-        id: smart
+  build-smart-assistant:
+    needs: verify-codemagic-token
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger build for Smart Assistant
         env:
           CM_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
           CM_TEAM:  ${{ secrets.CODEMAGIC_TEAM_ID }}
           APP_ID:   ${{ secrets.CODEMAGIC_APP_ID }}
           WF_ID:    ${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}
-          BRANCH:   main
         run: |
-          set -e
-          RES=$(curl -sSf -X POST https://api.codemagic.io/builds \
+          echo "🚀 Starting smart-assistant build..."
+          curl -sSf -X POST https://api.codemagic.io/builds \
             -H "Content-Type: application/json" \
             -H "x-auth-token: $CM_TOKEN" \
             -H "x-team-id: $CM_TEAM" \
-            -d "{\"appId\":\"$APP_ID\",\"workflowId\":\"$WF_ID\",\"branch\":\"$BRANCH\"}")
-          echo "$RES"
-          BID=$(python3 - <<'PY'
-import sys, json
-print(json.load(sys.stdin)["buildId"])
-PY
-          )
-          echo "buildId=$BID" >> "$GITHUB_OUTPUT"
+            -d "{\"appId\": \"$APP_ID\", \"workflowId\": \"$WF_ID\", \"branch\": \"main\"}"
 
-      - name: Trigger control-panel build
-        id: control
+  build-control-panel:
+    needs: verify-codemagic-token
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger build for Control Panel
         env:
           CM_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
           CM_TEAM:  ${{ secrets.CODEMAGIC_TEAM_ID }}
           APP_ID:   ${{ secrets.CODEMAGIC_CONTROL_PANEL_ID }}
           WF_ID:    ${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}
-          BRANCH:   main
         run: |
-          set -e
-          RES=$(curl -sSf -X POST https://api.codemagic.io/builds \
+          echo "🚀 Starting control-panel build..."
+          curl -sSf -X POST https://api.codemagic.io/builds \
             -H "Content-Type: application/json" \
             -H "x-auth-token: $CM_TOKEN" \
             -H "x-team-id: $CM_TEAM" \
-            -d "{\"appId\":\"$APP_ID\",\"workflowId\":\"$WF_ID\",\"branch\":\"$BRANCH\"}")
-          echo "$RES"
-          BID=$(python3 - <<'PY'
-import sys, json
-print(json.load(sys.stdin)["buildId"])
-PY
-          )
-          echo "buildId=$BID" >> "$GITHUB_OUTPUT"
-
-      - name: Summary
-        run: |
-          echo "Smart build:  ${{ steps.smart.outputs.buildId }}"
-          echo "Control build: ${{ steps.control.outputs.buildId }}"
+            -d "{\"appId\": \"$APP_ID\", \"workflowId\": \"$WF_ID\", \"branch\": \"main\"}"
