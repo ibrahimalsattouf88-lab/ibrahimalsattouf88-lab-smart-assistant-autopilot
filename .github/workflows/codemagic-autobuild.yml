@@ -1,0 +1,74 @@
+name: Codemagic AutoBuild (final)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Verify Codemagic token (and team access)
+        env:
+          CM_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
+          CM_TEAM:  ${{ secrets.CODEMAGIC_TEAM_ID }}
+        run: |
+          set -e
+          curl -sSf https://api.codemagic.io/me \
+            -H "x-auth-token: $CM_TOKEN" \
+            -H "x-team-id: $CM_TEAM" >/dev/null
+          echo "Token + team OK"
+
+      - name: Trigger smart-assistant build
+        id: smart
+        env:
+          CM_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
+          CM_TEAM:  ${{ secrets.CODEMAGIC_TEAM_ID }}
+          APP_ID:   ${{ secrets.CODEMAGIC_APP_ID }}
+          WF_ID:    ${{ secrets.CODEMAGIC_WORKFLOW_ID_SMART_ASSISTANT }}
+          BRANCH:   main
+        run: |
+          set -e
+          RES=$(curl -sSf -X POST https://api.codemagic.io/builds \
+            -H "Content-Type: application/json" \
+            -H "x-auth-token: $CM_TOKEN" \
+            -H "x-team-id: $CM_TEAM" \
+            -d "{\"appId\":\"$APP_ID\",\"workflowId\":\"$WF_ID\",\"branch\":\"$BRANCH\"}")
+          echo "$RES"
+          BID=$(python3 - <<'PY'
+import sys, json
+print(json.load(sys.stdin)["buildId"])
+PY
+          )
+          echo "buildId=$BID" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger control-panel build
+        id: control
+        env:
+          CM_TOKEN: ${{ secrets.CODEMAGIC_API_TOKEN }}
+          CM_TEAM:  ${{ secrets.CODEMAGIC_TEAM_ID }}
+          APP_ID:   ${{ secrets.CODEMAGIC_CONTROL_PANEL_ID }}
+          WF_ID:    ${{ secrets.CODEMAGIC_WORKFLOW_ID_CONTROL_PANEL }}
+          BRANCH:   main
+        run: |
+          set -e
+          RES=$(curl -sSf -X POST https://api.codemagic.io/builds \
+            -H "Content-Type: application/json" \
+            -H "x-auth-token: $CM_TOKEN" \
+            -H "x-team-id: $CM_TEAM" \
+            -d "{\"appId\":\"$APP_ID\",\"workflowId\":\"$WF_ID\",\"branch\":\"$BRANCH\"}")
+          echo "$RES"
+          BID=$(python3 - <<'PY'
+import sys, json
+print(json.load(sys.stdin)["buildId"])
+PY
+          )
+          echo "buildId=$BID" >> "$GITHUB_OUTPUT"
+
+      - name: Summary
+        run: |
+          echo "Smart build:  ${{ steps.smart.outputs.buildId }}"
+          echo "Control build: ${{ steps.control.outputs.buildId }}"
