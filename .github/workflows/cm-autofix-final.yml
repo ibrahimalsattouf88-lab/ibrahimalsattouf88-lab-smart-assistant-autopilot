@@ -9,42 +9,45 @@ jobs:
   verify-codemagic-token:
     runs-on: ubuntu-latest
     steps:
-      - name: Check token can list apps
+      - name: Print diagnostics (x-auth-token)
         run: |
-          set -e
-          curl -fsS -H "x-auth-token: ${{ secrets.CODEMAGIC_TOKEN }}" \
-               https://api.codemagic.io/apps >/dev/null
-          echo "Token OK"
+          echo "== GET /apps with x-auth-token =="
+          curl -sS -i -X GET "https://api.codemagic.io/apps?teamId=${{ secrets.CODEMAGIC_TEAM_ID }}" \
+            -H "x-auth-token: ${{ secrets.CODEMAGIC_TOKEN }}" || true
+      - name: Print diagnostics (Authorization Bearer)
+        run: |
+          echo "== GET /apps with Authorization: Bearer =="
+          curl -sS -i -X GET "https://api.codemagic.io/apps?teamId=${{ secrets.CODEMAGIC_TEAM_ID }}" \
+            -H "Authorization: Bearer ${{ secrets.CODEMAGIC_TOKEN }}" || true
 
   smart:
     name: Build smart-assistant-app on Codemagic
     needs: verify-codemagic-token
     runs-on: ubuntu-latest
     steps:
-      # الطريقة الرسمية باستخدام الأكشن
       - name: Trigger via Action (smart)
-        id: act
         uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
         with:
           token: ${{ secrets.CODEMAGIC_TOKEN }}
           app-id: ${{ secrets.CODEMAGIC_APP_SMART }}
           workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_SMART }}
           branch: main
-
-      # باك أب: استدعاء مباشر لـ API (يساعد لو فشل الـaction بسبب صيغة المعطيات)
       - name: Fallback trigger via API (smart) if Action failed
         if: failure()
         run: |
-          set -e
-          data=$(jq -n \
-            --arg appId "${{ secrets.CODEMAGIC_APP_SMART }}" \
-            --arg workflowId "${{ secrets.CODEMAGIC_WORKFLOW_SMART }}" \
-            --arg branch "main" \
-            '{appId:$appId, workflowId:$workflowId, branch:$branch}')
-          curl -fsS -X POST https://api.codemagic.io/builds \
-               -H "Content-Type: application/json" \
-               -H "x-auth-token: ${{ secrets.CODEMAGIC_TOKEN }}" \
-               -d "$data"
+          cat >payload.json <<JSON
+          {
+            "appId": "${{ secrets.CODEMAGIC_APP_SMART }}",
+            "workflowId": "${{ secrets.CODEMAGIC_WORKFLOW_SMART }}",
+            "branch": "main",
+            "teamId": "${{ secrets.CODEMAGIC_TEAM_ID }}"
+          }
+          JSON
+          echo "== POST /builds (fallback smart) =="
+          curl -sS -i -X POST https://api.codemagic.io/builds \
+            -H "Content-Type: application/json" \
+            -H "x-auth-token: ${{ secrets.CODEMAGIC_TOKEN }}" \
+            -d @payload.json
 
   panel:
     name: Build control-panel-app on Codemagic
@@ -52,24 +55,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger via Action (panel)
-        id: act
         uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
         with:
           token: ${{ secrets.CODEMAGIC_TOKEN }}
           app-id: ${{ secrets.CODEMAGIC_APP_PANEL }}
           workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_PANEL }}
           branch: main
-
       - name: Fallback trigger via API (panel) if Action failed
         if: failure()
         run: |
-          set -e
-          data=$(jq -n \
-            --arg appId "${{ secrets.CODEMAGIC_APP_PANEL }}" \
-            --arg workflowId "${{ secrets.CODEMAGIC_WORKFLOW_PANEL }}" \
-            --arg branch "main" \
-            '{appId:$appId, workflowId:$workflowId, branch:$branch}')
-          curl -fsS -X POST https://api.codemagic.io/builds \
-               -H "Content-Type: application/json" \
-               -H "x-auth-token: ${{ secrets.CODEMAGIC_TOKEN }}" \
-               -d "$data"
+          cat >payload.json <<JSON
+          {
+            "appId": "${{ secrets.CODEMAGIC_APP_PANEL }}",
+            "workflowId": "${{ secrets.CODEMAGIC_WORKFLOW_PANEL }}",
+            "branch": "main",
+            "teamId": "${{ secrets.CODEMAGIC_TEAM_ID }}"
+          }
+          JSON
+          echo "== POST /builds (fallback panel) =="
+          curl -sS -i -X POST https://api.codemagic.io/builds \
+            -H "Content-Type: application/json" \
+            -H "x-auth-token: ${{ secrets.CODEMAGIC_TOKEN }}" \
+            -d @payload.json
