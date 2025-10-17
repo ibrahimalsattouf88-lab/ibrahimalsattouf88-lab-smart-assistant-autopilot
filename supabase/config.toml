@@ -1,0 +1,13 @@
+[functions]
+verify_jwt = true
+
+[cron]
+jobs = [
+  { name = "fx_sp_today",    schedule = "*/5 * * * *" },
+  { name = "fx_syrianpound", schedule = "*/5 * * * *" },
+  { name = "fx_lirarate",    schedule = "*/5 * * * *" },
+  { name = "fx_telegram",    schedule = "*/5 * * * *" },
+  { name = "fx_source5",     schedule = "*/5 * * * *" },
+  { name = "fx_syp_black",   schedule = "*/15 * * * *" },
+  { name = "advice_engine",  schedule = "*/30 * * * *" }
+]
