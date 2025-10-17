@@ -1,0 +1,20 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Lint functions
+        run: deno fmt --check && deno lint
+      - name: Verify required files
+        run: |
+          test -f supabase/config.toml
+          test -f supabase/functions/fx_syp_black/index.ts
+          test -f supabase/functions/advice_engine/index.ts
+      - name: Placeholder non-empty checks
+        run: echo "OK"
