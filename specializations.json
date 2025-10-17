@@ -1,0 +1,7136 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2025-10-17T15:54:45.933877Z",
+  "specializations": [
+    {
+      "id": 503,
+      "name": "أسرة إغاثية محلية",
+      "slug": "أسرة-إغاثية-محلية",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تسجيل مستفيدين (نماذج/صور)",
+          "input_schema": {
+            "forms": "list[file]"
+          },
+          "output_schema": {
+            "beneficiaries": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.93
+          },
+          "priority": 1
+        },
+        {
+          "name": "مطابقة احتياج/مورد (قواعد)",
+          "input_schema": {
+            "needs": "table",
+            "donations": "table"
+          },
+          "output_schema": {
+            "matches": "table"
+          },
+          "kpis": {
+            "match_rate": 0.75
+          },
+          "priority": 1
+        },
+        {
+          "name": "تقارير توزيع ومؤشرات",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG لوائح/معايير استهداف",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "توثيق بالصور وتقارير",
+          "input_schema": {
+            "photos": "list[file]"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 500,
+      "name": "استيراد/تصدير صغير",
+      "slug": "استيراد-تصدير-صغير",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "فهرسة وثائق شحن (فاتورة/بوليصة/منشأ)",
+          "input_schema": {
+            "docs": "list[file]"
+          },
+          "output_schema": {
+            "registry": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.95
+          },
+          "priority": 1
+        },
+        {
+          "name": "حساب تكاليف إجمالية (جمرك/شحن/تأمين)",
+          "input_schema": {
+            "tariffs": "table",
+            "dims": "table"
+          },
+          "output_schema": {
+            "cost_sheet": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.99
+          },
+          "priority": 1
+        },
+        {
+          "name": "تتبّع شحنات وتنبيهات",
+          "input_schema": {
+            "events": "stream"
+          },
+          "output_schema": {
+            "tracking_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG تعليمات جمركية",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير شهرية",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 206,
+      "name": "بيع قطع تبديل سيارات مستعملة",
+      "slug": "بيع-قطع-تبديل-سيارات-مستعملة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "استلام قصة وتفكيك مبسّط",
+          "input_schema": {
+            "lot_id": "str",
+            "source": "str",
+            "items_list?": "list[str]"
+          },
+          "output_schema": {
+            "bom_table": "table"
+          },
+          "kpis": {
+            "intake_time_min": 10
+          },
+          "priority": 1
+        },
+        {
+          "name": "ترميز قطع فريد + بطاقات",
+          "input_schema": {
+            "bom_table": "table"
+          },
+          "output_schema": {
+            "labels_pdf": "pdf"
+          },
+          "kpis": {
+            "traceability": 1.0
+          },
+          "priority": 1
+        },
+        {
+          "name": "ربط القطع بالموديلات المتوافقة",
+          "input_schema": {
+            "part_number": "str"
+          },
+          "output_schema": {
+            "compat_table": "table"
+          },
+          "kpis": {
+            "match_rate": 0.85
+          },
+          "priority": 2
+        },
+        {
+          "name": "فهرسة صور وبحث سريع",
+          "input_schema": {
+            "photos": "list[file]"
+          },
+          "output_schema": {
+            "index_id": "str"
+          },
+          "kpis": {
+            "retrieval@10": 0.85
+          },
+          "priority": 2
+        },
+        {
+          "name": "بيع وفاتورة سريعة",
+          "input_schema": {
+            "part_id": "str",
+            "buyer": "str"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "checkout_time_min": 3
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "crawler",
+          "tool_key": "crawler",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 403,
+      "name": "تاجر بناء (مواد بناء)",
+      "slug": "تاجر-بناء-مواد-بناء",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "جرد مواد وأكواد",
+          "input_schema": {
+            "images|invoices": "list[file]"
+          },
+          "output_schema": {
+            "stock_table": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.95
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسعير ديناميكي حسب السوق",
+          "input_schema": {
+            "stock": "table",
+            "market": "table"
+          },
+          "output_schema": {
+            "price_updates": "table"
+          },
+          "kpis": {
+            "margin_min": 0.08
+          },
+          "priority": 1
+        },
+        {
+          "name": "اقتراح طلبية ومخزون أمان",
+          "input_schema": {
+            "sales": "table",
+            "lead_times": "table"
+          },
+          "output_schema": {
+            "po_csv": "file"
+          },
+          "kpis": {
+            "fill_rate": 0.92
+          },
+          "priority": 2
+        },
+        {
+          "name": "تنبيهات نفاد/تلف",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير يومية",
+          "input_schema": {
+            "pos_csv": "file"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 404,
+      "name": "تاجر عقارات وأراضٍ",
+      "slug": "تاجر-عقارات-وأراضٍ",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "فهرسة عقارات وصكوك",
+          "input_schema": {
+            "docs_images": "list[file]"
+          },
+          "output_schema": {
+            "registry_table": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.93
+          },
+          "priority": 1
+        },
+        {
+          "name": "مطابقة مشترٍ/عقار (قواعد)",
+          "input_schema": {
+            "leads": "table",
+            "properties": "table"
+          },
+          "output_schema": {
+            "matches": "table"
+          },
+          "kpis": {
+            "match_rate": 0.7
+          },
+          "priority": 1
+        },
+        {
+          "name": "RAG لوائح وتراخيص",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقدير أسعار مبسّط",
+          "input_schema": {
+            "features": "table",
+            "comps": "table"
+          },
+          "output_schema": {
+            "valuation_md": "md"
+          },
+          "kpis": {
+            "mape": 0.25
+          },
+          "priority": 2
+        },
+        {
+          "name": "اتفاقيات بيع/إيجار قياسية",
+          "input_schema": {
+            "deal_terms": "md"
+          },
+          "output_schema": {
+            "contract_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 107,
+      "name": "تاجر غذائية جملة",
+      "slug": "تاجر-غذائية-جملة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تنبؤ طلبات بسيط",
+          "input_schema": {
+            "sales_hist": "table",
+            "season": "str"
+          },
+          "output_schema": {
+            "forecast_csv": "file"
+          },
+          "kpis": {
+            "mape": 0.25
+          },
+          "priority": 1
+        },
+        {
+          "name": "اقتراح طلبية ومخزون أمان",
+          "input_schema": {
+            "stock": "table",
+            "lead_times": "table"
+          },
+          "output_schema": {
+            "po_csv": "file"
+          },
+          "kpis": {
+            "fill_rate": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسعير دفعات بالجملة",
+          "input_schema": {
+            "batches": "table",
+            "expiry": "table"
+          },
+          "output_schema": {
+            "price_table": "table"
+          },
+          "kpis": {
+            "waste_reduction": 0.1
+          },
+          "priority": 2
+        },
+        {
+          "name": "تحليل أرباح الصنف",
+          "input_schema": {
+            "sales": "table"
+          },
+          "output_schema": {
+            "pnl_md": "md"
+          },
+          "kpis": {
+            "gross_margin_target": 0.12
+          },
+          "priority": 3
+        },
+        {
+          "name": "تنبيهات نقص/تلف",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 108,
+      "name": "تاجر غذائية مفرق",
+      "slug": "تاجر-غذائية-مفرق",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "قراءة فواتير الموردين",
+          "input_schema": {
+            "images": "list[file]"
+          },
+          "output_schema": {
+            "rows": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.93
+          },
+          "priority": 1
+        },
+        {
+          "name": "إدارة رفوف وتنزيلات",
+          "input_schema": {
+            "stock": "table",
+            "expiry": "table"
+          },
+          "output_schema": {
+            "markdowns": "table"
+          },
+          "kpis": {
+            "waste_reduction": 0.15
+          },
+          "priority": 2
+        },
+        {
+          "name": "حساب هامش الصنف",
+          "input_schema": {
+            "purchases": "table",
+            "sales": "table"
+          },
+          "output_schema": {
+            "margin_table": "table"
+          },
+          "kpis": {
+            "margin_min": 0.08
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير POS يومية",
+          "input_schema": {
+            "pos_csv": "file"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        },
+        {
+          "name": "تنبيهات نفاد",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 302,
+      "name": "تاجر فواكه وخضار جملة (سوق الهال)",
+      "slug": "تاجر-فواكه-وخضار-جملة-سوق-الهال",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "استلام دفعات وفرز",
+          "input_schema": {
+            "truck_in_csv": "file"
+          },
+          "output_schema": {
+            "lot_table": "table"
+          },
+          "kpis": {
+            "intake_time_min": 10
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسعير يومي حسب الجودة",
+          "input_schema": {
+            "lot_table": "table",
+            "market_prices": "table"
+          },
+          "output_schema": {
+            "price_list": "table"
+          },
+          "kpis": {
+            "waste_reduction": 0.1
+          },
+          "priority": 1
+        },
+        {
+          "name": "تخصيص للزبائن بالجملة",
+          "input_schema": {
+            "orders": "table",
+            "lot_table": "table"
+          },
+          "output_schema": {
+            "allocations": "table"
+          },
+          "kpis": {
+            "fill_rate": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "تنبيهات تلف/تبريد",
+          "input_schema": {
+            "storage": "table",
+            "temp_logs": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "spoilage_rate_max": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير أرباح/نثريات يومية",
+          "input_schema": {
+            "sales": "table",
+            "expenses": "table"
+          },
+          "output_schema": {
+            "pnl_md": "md"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "crawler",
+          "tool_key": "crawler",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 106,
+      "name": "تسويق بالمحتوى",
+      "slug": "تسويق-بالمحتوى",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تقويم محتوى شهري",
+          "input_schema": {
+            "products": "list[str]",
+            "channels": "list[str]"
+          },
+          "output_schema": {
+            "calendar_csv": "file"
+          },
+          "kpis": {
+            "coverage": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "توليد مسودات منشورات",
+          "input_schema": {
+            "brief_md": "md"
+          },
+          "output_schema": {
+            "posts_md": "md"
+          },
+          "kpis": {
+            "edit_rate_max": 0.3
+          },
+          "priority": 1
+        },
+        {
+          "name": "تحليل أداء القنوات",
+          "input_schema": {
+            "analytics_csv": "file"
+          },
+          "output_schema": {
+            "insights_md": "md"
+          },
+          "kpis": {
+            "lift_expected": 0.1
+          },
+          "priority": 2
+        },
+        {
+          "name": "لوحة مهام وحالة",
+          "input_schema": {
+            "backlog": "table"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 2
+        },
+        {
+          "name": "حزمة تقارير PDF",
+          "input_schema": {
+            "period": "str"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 30
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "crawler",
+          "tool_key": "crawler",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 6,
+      "name": "ربة منزل",
+      "slug": "ربة-منزل",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "خطة أسبوعية للمنزل",
+          "input_schema": {
+            "family_size": "int",
+            "budget": "number"
+          },
+          "output_schema": {
+            "plan_md": "md"
+          },
+          "kpis": {
+            "time_saved_min": 30
+          },
+          "priority": 1
+        },
+        {
+          "name": "قائمة تسوق ذكية",
+          "input_schema": {
+            "pantry_csv": "file",
+            "menus": "list[str]"
+          },
+          "output_schema": {
+            "shopping_list": "table"
+          },
+          "kpis": {
+            "waste_reduction": 0.2
+          },
+          "priority": 1
+        },
+        {
+          "name": "جدولة تنظيف وغسيل",
+          "input_schema": {
+            "rooms": "list[str]"
+          },
+          "output_schema": {
+            "calendar": "ics"
+          },
+          "kpis": {
+            "completion_rate": 0.85
+          },
+          "priority": 2
+        },
+        {
+          "name": "متابعة مصروف يومي",
+          "input_schema": {
+            "expenses_csv": "file"
+          },
+          "output_schema": {
+            "summary_md": "md"
+          },
+          "kpis": {
+            "budget_adherence": 0.9
+          },
+          "priority": 3
+        },
+        {
+          "name": "وصفات حسب المتاح",
+          "input_schema": {
+            "available": "list[str]"
+          },
+          "output_schema": {
+            "recipes_md": "md"
+          },
+          "kpis": {
+            "utilization": 0.7
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 109,
+      "name": "روضة أطفال",
+      "slug": "روضة-أطفال",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "سجلات حضور وتواصل مع الأهل",
+          "input_schema": {
+            "roster": "table"
+          },
+          "output_schema": {
+            "updates": "list[event]"
+          },
+          "kpis": {
+            "notify_latency_min": 10
+          },
+          "priority": 1
+        },
+        {
+          "name": "منهاج أسبوعي وأنشطة",
+          "input_schema": {
+            "age_group": "str"
+          },
+          "output_schema": {
+            "plan_md": "md"
+          },
+          "kpis": {
+            "coverage": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "متابعة رسوم ودفعات",
+          "input_schema": {
+            "payments": "table"
+          },
+          "output_schema": {
+            "balance_table": "table"
+          },
+          "kpis": {
+            "arrears_rate_max": 0.1
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقييم نمو ومهارات",
+          "input_schema": {
+            "observations": "md"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "completeness": 0.9
+          },
+          "priority": 3
+        },
+        {
+          "name": "لوحة سلامة ومخاطر",
+          "input_schema": {
+            "incidents": "table"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "incident_rate_max": 0.01
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 8,
+      "name": "سوبر ماركت",
+      "slug": "سوبر-ماركت",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "قراءة باركود وجرد",
+          "input_schema": {
+            "images": "list[file]"
+          },
+          "output_schema": {
+            "stock_table": "table"
+          },
+          "kpis": {
+            "scan_accuracy": 0.97
+          },
+          "priority": 1
+        },
+        {
+          "name": "تنبيه نفاد وتخفيضات",
+          "input_schema": {
+            "stock": "table",
+            "sales": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "اقتراح طلبية تلقائية",
+          "input_schema": {
+            "sales": "table",
+            "lead_times": "table"
+          },
+          "output_schema": {
+            "po_csv": "file"
+          },
+          "kpis": {
+            "fill_rate": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "تسعير ديناميكي بسيط",
+          "input_schema": {
+            "stock": "table",
+            "expiry_dates": "table"
+          },
+          "output_schema": {
+            "price_updates": "table"
+          },
+          "kpis": {
+            "waste_reduction": 0.15
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقارير يومية مبيعات",
+          "input_schema": {
+            "pos_csv": "file"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 25
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 407,
+      "name": "شركة سياحية",
+      "slug": "شركة-سياحية",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "باقات وعروض وجدولة",
+          "input_schema": {
+            "inventory": "table",
+            "seasons": "str"
+          },
+          "output_schema": {
+            "packages_md": "md"
+          },
+          "kpis": {
+            "sell_through": 0.7
+          },
+          "priority": 1
+        },
+        {
+          "name": "حجوزات وتنبيهات",
+          "input_schema": {
+            "calendar": "ics"
+          },
+          "output_schema": {
+            "notifications": "list[event]"
+          },
+          "kpis": {
+            "no_show_reduction": 0.1
+          },
+          "priority": 1
+        },
+        {
+          "name": "تكامل مزودين (API)",
+          "input_schema": {
+            "suppliers": "table"
+          },
+          "output_schema": {
+            "sync_status": "md"
+          },
+          "kpis": {
+            "uptime": 0.99
+          },
+          "priority": 2
+        },
+        {
+          "name": "تحليل مراجعات العملاء",
+          "input_schema": {
+            "reviews_csv": "file"
+          },
+          "output_schema": {
+            "insights_md": "md"
+          },
+          "kpis": {
+            "sentiment_f1": 0.85
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير مبيعات",
+          "input_schema": {
+            "sales": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "crawler",
+          "tool_key": "crawler",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 408,
+      "name": "شركة سياحية وحج وعمرة",
+      "slug": "شركة-سياحية-وحج-وعمرة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "إدارة ملفات تأشيرات وجوازات",
+          "input_schema": {
+            "docs": "list[file]"
+          },
+          "output_schema": {
+            "registry_table": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.95
+          },
+          "priority": 1
+        },
+        {
+          "name": "تتبع حالة التأشيرة وإشعارات",
+          "input_schema": {
+            "visa_status": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "notify_latency_min": 10
+          },
+          "priority": 1
+        },
+        {
+          "name": "حجوزات جماعية (فنادق/طيران)",
+          "input_schema": {
+            "groups": "table"
+          },
+          "output_schema": {
+            "booking_plan": "md"
+          },
+          "kpis": {
+            "seat_fill_rate": 0.85
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG تعليمات قنصلية",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير دورية",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 406,
+      "name": "شركة نقل خارجي",
+      "slug": "شركة-نقل-خارجي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تخطيط رحلات دولية",
+          "input_schema": {
+            "routes": "table",
+            "permits": "table"
+          },
+          "output_schema": {
+            "plan_md": "md"
+          },
+          "kpis": {
+            "compliance_ok": 1.0
+          },
+          "priority": 1
+        },
+        {
+          "name": "بوالص شحن دولية",
+          "input_schema": {
+            "shipments": "table"
+          },
+          "output_schema": {
+            "awb_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 1
+        },
+        {
+          "name": "تكاليف جمرك/رسوم",
+          "input_schema": {
+            "tariffs": "table",
+            "dims": "table"
+          },
+          "output_schema": {
+            "cost_sheet": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.99
+          },
+          "priority": 2
+        },
+        {
+          "name": "تتبّع وتتالي حالات",
+          "input_schema": {
+            "events": "stream"
+          },
+          "output_schema": {
+            "tracking_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير شهرية",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 405,
+      "name": "شركة نقل داخلي",
+      "slug": "شركة-نقل-داخلي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "إدارة رحلات وجداول",
+          "input_schema": {
+            "routes": "table",
+            "vehicles": "table"
+          },
+          "output_schema": {
+            "schedule_csv": "file"
+          },
+          "kpis": {
+            "on_time_rate": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "تتبّع الأسطول والحوادث",
+          "input_schema": {
+            "events": "stream"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 1
+        },
+        {
+          "name": "تحليل إيرادات/تكاليف",
+          "input_schema": {
+            "ops": "table",
+            "fuel": "table"
+          },
+          "output_schema": {
+            "pnl_md": "md"
+          },
+          "kpis": {
+            "variance_max": 0.1
+          },
+          "priority": 2
+        },
+        {
+          "name": "تنبيهات أعطال/صيانة",
+          "input_schema": {
+            "telemetry": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "mttr_days": 2
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير شهرية PDF",
+          "input_schema": {
+            "pnl_md": "md"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 306,
+      "name": "صالون تجميل نسائي",
+      "slug": "صالون-تجميل-نسائي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "حجوزات وجدولة موظفات",
+          "input_schema": {
+            "calendar": "ics",
+            "staff": "table"
+          },
+          "output_schema": {
+            "rota_csv": "file"
+          },
+          "kpis": {
+            "utilization": 0.8
+          },
+          "priority": 1
+        },
+        {
+          "name": "ملفات زبائن وخطط جلسات",
+          "input_schema": {
+            "profiles": "table"
+          },
+          "output_schema": {
+            "plan_md": "md"
+          },
+          "kpis": {
+            "retention_lift": 0.1
+          },
+          "priority": 1
+        },
+        {
+          "name": "مخزون مستحضرات وتنبيه",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.06
+          },
+          "priority": 2
+        },
+        {
+          "name": "تحليل رضا/مراجعات",
+          "input_schema": {
+            "reviews_csv": "file"
+          },
+          "output_schema": {
+            "insights_md": "md"
+          },
+          "kpis": {
+            "sentiment_f1": 0.85
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقارير دخل ومصاريف",
+          "input_schema": {
+            "pos": "file",
+            "expenses": "table"
+          },
+          "output_schema": {
+            "pnl_md": "md"
+          },
+          "kpis": {
+            "time_saved_min": 15
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 305,
+      "name": "صالون حلاقة رجالي",
+      "slug": "صالون-حلاقة-رجالي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "حجوزات ومواعيد",
+          "input_schema": {
+            "calendar": "ics"
+          },
+          "output_schema": {
+            "notifications": "list[event]"
+          },
+          "kpis": {
+            "no_show_reduction": 0.1
+          },
+          "priority": 1
+        },
+        {
+          "name": "باقات وأسعار وخروج فاتورة",
+          "input_schema": {
+            "services": "table"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 1
+        },
+        {
+          "name": "إدارة مستلزمات",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "reorder_list": "table"
+          },
+          "kpis": {
+            "oos_rate_max": 0.06
+          },
+          "priority": 2
+        },
+        {
+          "name": "تحليل رضا العملاء",
+          "input_schema": {
+            "reviews_csv": "file"
+          },
+          "output_schema": {
+            "insights_md": "md"
+          },
+          "kpis": {
+            "sentiment_f1": 0.85
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقارير يومية دخل",
+          "input_schema": {
+            "pos": "file"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 15
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 3,
+      "name": "صيدلي",
+      "slug": "صيدلي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تحويل وصفات مصوّرة إلى طلبات",
+          "input_schema": {
+            "rx_images": "list[file]"
+          },
+          "output_schema": {
+            "orders": "table"
+          },
+          "kpis": {
+            "name_match_f1": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "تنبيه تعارضات دوائية أساسية",
+          "input_schema": {
+            "orders": "table"
+          },
+          "output_schema": {
+            "warnings": "list[str]"
+          },
+          "kpis": {
+            "sensitivity": 0.95
+          },
+          "priority": 1
+        },
+        {
+          "name": "إدارة مخزون أدوية",
+          "input_schema": {
+            "stock_csv": "file"
+          },
+          "output_schema": {
+            "reorder_list": "table"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "نشرات تعليمية للمرضى",
+          "input_schema": {
+            "drug": "str"
+          },
+          "output_schema": {
+            "leaflet_pdf": "pdf"
+          },
+          "kpis": {
+            "readability": "A"
+          },
+          "priority": 3
+        },
+        {
+          "name": "سجل صرفيات يومي",
+          "input_schema": {
+            "sales": "table"
+          },
+          "output_schema": {
+            "summary_md": "md"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 502,
+      "name": "طابعة ثلاثية الأبعاد/نمذجة",
+      "slug": "طابعة-ثلاثية-الأبعاد-نمذجة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "فحص نموذج STL/OBJ",
+          "input_schema": {
+            "model_file": "file"
+          },
+          "output_schema": {
+            "check_md": "md"
+          },
+          "kpis": {
+            "coverage": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "تقدير زمن وكلفة طباعة",
+          "input_schema": {
+            "material": "enum[PLA,ABS,Resin]",
+            "volume_cm3": "number"
+          },
+          "output_schema": {
+            "quote_pdf": "pdf"
+          },
+          "kpis": {
+            "quote_accuracy": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "تقسيم مهام طباعة وجدولة",
+          "input_schema": {
+            "jobs": "table"
+          },
+          "output_schema": {
+            "schedule_csv": "file"
+          },
+          "kpis": {
+            "utilization": 0.8
+          },
+          "priority": 2
+        },
+        {
+          "name": "إدارة مواد/خيوط",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "reorder_list": "table"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "تسليم و فاتورة",
+          "input_schema": {
+            "job_id": "str"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 103,
+      "name": "طبيب أطفال",
+      "slug": "طبيب-أطفال",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تلخيص زيارة على SOAP",
+          "input_schema": {
+            "transcript": "text"
+          },
+          "output_schema": {
+            "soap": "md"
+          },
+          "kpis": {
+            "time_saved_min": 15
+          },
+          "priority": 1
+        },
+        {
+          "name": "جداول لقاح وتذكير",
+          "input_schema": {
+            "dob": "date"
+          },
+          "output_schema": {
+            "schedule": "list[event]"
+          },
+          "kpis": {
+            "adherence_proxy": 0.75
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG إرشادات الأطفال",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "نشرات للأهل",
+          "input_schema": {
+            "topic": "str"
+          },
+          "output_schema": {
+            "leaflet_pdf": "pdf"
+          },
+          "kpis": {
+            "readability": "A"
+          },
+          "priority": 3
+        },
+        {
+          "name": "متابعة نمو (حاسبات)",
+          "input_schema": {
+            "age_mo": "int",
+            "weight_kg": "number",
+            "height_cm": "number"
+          },
+          "output_schema": {
+            "z_scores": "table"
+          },
+          "kpis": {
+            "calc_accuracy": 0.99
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "transcriber",
+          "tool_key": "transcriber",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 201,
+      "name": "طبيب بولية تناسلية",
+      "slug": "طبيب-بولية-تناسلية",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "SOAP ملخّص زيارة",
+          "input_schema": {
+            "notes": "text"
+          },
+          "output_schema": {
+            "soap": "md"
+          },
+          "kpis": {
+            "time_saved_min": 15
+          },
+          "priority": 1
+        },
+        {
+          "name": "خطة فحوص أولية (قواعد)",
+          "input_schema": {
+            "symptoms": "list[str]"
+          },
+          "output_schema": {
+            "tests": "list[str]"
+          },
+          "kpis": {
+            "precision": 0.8
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG بروتوكولات بولية",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تذكير مواعيد/أدوية",
+          "input_schema": {
+            "meds": "table"
+          },
+          "output_schema": {
+            "events": "list[event]"
+          },
+          "kpis": {
+            "adherence_proxy": 0.7
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقرير PDF",
+          "input_schema": {
+            "soap": "md"
+          },
+          "output_schema": {
+            "visit_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "transcriber",
+          "tool_key": "transcriber",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 5,
+      "name": "طبيب عام",
+      "slug": "طبيب-عام",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تلخيص شكوى وملاحظات",
+          "input_schema": {
+            "transcript": "text"
+          },
+          "output_schema": {
+            "soap_note_md": "md"
+          },
+          "kpis": {
+            "time_saved_min": 15
+          },
+          "priority": 1
+        },
+        {
+          "name": "اقتراح فحوصات أولية (قواعد)",
+          "input_schema": {
+            "symptoms": "list[str]"
+          },
+          "output_schema": {
+            "tests": "list[str]"
+          },
+          "kpis": {
+            "precision": 0.8
+          },
+          "priority": 2
+        },
+        {
+          "name": "تذكير أدوية بسيط",
+          "input_schema": {
+            "meds": "table"
+          },
+          "output_schema": {
+            "schedule": "list[event]"
+          },
+          "kpis": {
+            "adherence_proxy": 0.7
+          },
+          "priority": 3
+        },
+        {
+          "name": "RAG على دلائل إرشادية عامة",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقرير زيارة PDF",
+          "input_schema": {
+            "soap": "md"
+          },
+          "output_schema": {
+            "visit_pdf": "pdf"
+          },
+          "kpis": {
+            "format_compliance": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "transcriber",
+          "tool_key": "transcriber",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 200,
+      "name": "طبيب غدد",
+      "slug": "طبيب-غدد",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تلخيص زيارة (SOAP)",
+          "input_schema": {
+            "transcript": "text"
+          },
+          "output_schema": {
+            "soap": "md"
+          },
+          "kpis": {
+            "time_saved_min": 15
+          },
+          "priority": 1
+        },
+        {
+          "name": "حساب جرعات أنسولين مبسطة",
+          "input_schema": {
+            "weight_kg": "number",
+            "carb_ratio": "number"
+          },
+          "output_schema": {
+            "dose_plan": "table"
+          },
+          "kpis": {
+            "calc_accuracy": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "RAG أدلة الغدد",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تذكير تحاليل دورية",
+          "input_schema": {
+            "patient_id": "str"
+          },
+          "output_schema": {
+            "events": "list[event]"
+          },
+          "kpis": {
+            "adherence_proxy": 0.7
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقرير متابعة PDF",
+          "input_schema": {
+            "soap": "md"
+          },
+          "output_schema": {
+            "visit_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "transcriber",
+          "tool_key": "transcriber",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 105,
+      "name": "طبيب قلبية",
+      "slug": "طبيب-قلبية",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تلخيص ECG/إيكو (نصيًا)",
+          "input_schema": {
+            "report_text": "text"
+          },
+          "output_schema": {
+            "summary_md": "md"
+          },
+          "kpis": {
+            "time_saved_min": 10
+          },
+          "priority": 1
+        },
+        {
+          "name": "حساب مخاطر قلبية بسيطة",
+          "input_schema": {
+            "age": "int",
+            "sex": "enum[m,f]",
+            "bp": "number",
+            "chol": "number",
+            "smoker": "bool"
+          },
+          "output_schema": {
+            "risk_pct": "number"
+          },
+          "kpis": {
+            "calc_accuracy": 0.98
+          },
+          "priority": 2
+        },
+        {
+          "name": "تذكير أدوية/مواعيد",
+          "input_schema": {
+            "meds": "table"
+          },
+          "output_schema": {
+            "events": "list[event]"
+          },
+          "kpis": {
+            "adherence_proxy": 0.7
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG دلائل قلبية عامة",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقرير متابعة PDF",
+          "input_schema": {
+            "soap": "md"
+          },
+          "output_schema": {
+            "visit_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 104,
+      "name": "طبيب نسائية",
+      "slug": "طبيب-نسائية",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "ملخص زيارة وفحوص",
+          "input_schema": {
+            "notes": "text"
+          },
+          "output_schema": {
+            "soap": "md"
+          },
+          "kpis": {
+            "time_saved_min": 15
+          },
+          "priority": 1
+        },
+        {
+          "name": "تتبع حمل (جداول/تذكير)",
+          "input_schema": {
+            "lmp_date": "date"
+          },
+          "output_schema": {
+            "milestones": "list[event]"
+          },
+          "kpis": {
+            "adherence_proxy": 0.7
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG بروتوكولات نسائية",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تحذيرات أدوية/تداخلات",
+          "input_schema": {
+            "meds": "table"
+          },
+          "output_schema": {
+            "warnings": "list[str]"
+          },
+          "kpis": {
+            "sensitivity": 0.95
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقرير متابعة PDF",
+          "input_schema": {
+            "soap": "md"
+          },
+          "output_schema": {
+            "visit_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "transcriber",
+          "tool_key": "transcriber",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 203,
+      "name": "متجر أحذية",
+      "slug": "متجر-أحذية",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "جرد وأحجام",
+          "input_schema": {
+            "images": "list[file]"
+          },
+          "output_schema": {
+            "stock_table": "table"
+          },
+          "kpis": {
+            "scan_accuracy": 0.97
+          },
+          "priority": 1
+        },
+        {
+          "name": "اقتراح طلبية مقاسات حرجة",
+          "input_schema": {
+            "stock": "table",
+            "sales": "table"
+          },
+          "output_schema": {
+            "po_csv": "file"
+          },
+          "kpis": {
+            "size_fill_rate": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "تنزيلات قرب نهاية الموسم",
+          "input_schema": {
+            "stock": "table",
+            "season": "str"
+          },
+          "output_schema": {
+            "markdowns": "table"
+          },
+          "kpis": {
+            "waste_reduction": 0.1
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير مبيعات",
+          "input_schema": {
+            "pos_csv": "file"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        },
+        {
+          "name": "تنبيهات نفاد",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 308,
+      "name": "متجر أدوات منزلية",
+      "slug": "متجر-أدوات-منزلية",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "جرد عبر باركود/صور",
+          "input_schema": {
+            "images": "list[file]"
+          },
+          "output_schema": {
+            "stock_table": "table"
+          },
+          "kpis": {
+            "scan_accuracy": 0.97
+          },
+          "priority": 1
+        },
+        {
+          "name": "تنبيهات نفاد وتنزيلات",
+          "input_schema": {
+            "stock": "table",
+            "expiry?": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]",
+            "markdowns?": "table"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "اقتراح طلبية",
+          "input_schema": {
+            "sales": "table",
+            "lead_times": "table"
+          },
+          "output_schema": {
+            "po_csv": "file"
+          },
+          "kpis": {
+            "fill_rate": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير POS يومية",
+          "input_schema": {
+            "pos_csv": "file"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        },
+        {
+          "name": "تحليل هوامش",
+          "input_schema": {
+            "purchases": "table",
+            "sales": "table"
+          },
+          "output_schema": {
+            "margin_table": "table"
+          },
+          "kpis": {
+            "margin_min": 0.1
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 202,
+      "name": "متجر ألبسة",
+      "slug": "متجر-ألبسة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "جرد سريع عبر باركود/صور",
+          "input_schema": {
+            "images": "list[file]"
+          },
+          "output_schema": {
+            "stock_table": "table"
+          },
+          "kpis": {
+            "scan_accuracy": 0.97
+          },
+          "priority": 1
+        },
+        {
+          "name": "تنبيه نفاد ومقاسات",
+          "input_schema": {
+            "stock": "table",
+            "sales": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.06
+          },
+          "priority": 2
+        },
+        {
+          "name": "تسعير وعروض موسمية",
+          "input_schema": {
+            "stock": "table",
+            "season": "str"
+          },
+          "output_schema": {
+            "price_updates": "table"
+          },
+          "kpis": {
+            "sell_through_target": 0.7
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير POS يومية",
+          "input_schema": {
+            "pos_csv": "file"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        },
+        {
+          "name": "اقتراح طلبية",
+          "input_schema": {
+            "sales": "table",
+            "lead_times": "table"
+          },
+          "output_schema": {
+            "po_csv": "file"
+          },
+          "kpis": {
+            "fill_rate": 0.9
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 301,
+      "name": "متعهد إكساء داخلي",
+      "slug": "متعهد-إكساء-داخلي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "قائمة كميات تشطيب",
+          "input_schema": {
+            "rooms": "table",
+            "finishes_catalog": "table"
+          },
+          "output_schema": {
+            "boq_xlsx": "xlsx"
+          },
+          "kpis": {
+            "completeness": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسعير مبدئي",
+          "input_schema": {
+            "boq_xlsx": "file",
+            "prices": "table"
+          },
+          "output_schema": {
+            "quote_pdf": "pdf"
+          },
+          "kpis": {
+            "quote_accuracy": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "جدولة فرق العمل",
+          "input_schema": {
+            "staff": "table",
+            "constraints": "md"
+          },
+          "output_schema": {
+            "rota_csv": "file"
+          },
+          "kpis": {
+            "overtime_max_pct": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "تتبع تنفيذ وصور قبل/بعد",
+          "input_schema": {
+            "photos": "list[file]",
+            "checklist": "table"
+          },
+          "output_schema": {
+            "progress_md": "md"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        },
+        {
+          "name": "فواتير مرحلية",
+          "input_schema": {
+            "progress_md": "md"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 300,
+      "name": "متعهد بناء",
+      "slug": "متعهد-بناء",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تفكيك بنود العطاء إلى WBS",
+          "input_schema": {
+            "tender_md": "md"
+          },
+          "output_schema": {
+            "wbs_csv": "file"
+          },
+          "kpis": {
+            "coverage": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "حساب كميات أولية",
+          "input_schema": {
+            "boq_items": "table"
+          },
+          "output_schema": {
+            "qty_sheet": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "جدولة موارد ومقاولين فرعيين",
+          "input_schema": {
+            "resources": "table"
+          },
+          "output_schema": {
+            "gantt_csv": "file"
+          },
+          "kpis": {
+            "slippage_max_days": 1
+          },
+          "priority": 2
+        },
+        {
+          "name": "متابعة إنجاز وتكاليف",
+          "input_schema": {
+            "daily_logs": "table"
+          },
+          "output_schema": {
+            "cost_report": "pdf"
+          },
+          "kpis": {
+            "cv_sv_threshold": 0.1
+          },
+          "priority": 3
+        },
+        {
+          "name": "تنبيهات تأخير",
+          "input_schema": {
+            "plan_vs_actual": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "latency_s": 60
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 2,
+      "name": "محاسب",
+      "slug": "محاسب",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "استخراج فواتير من صور",
+          "input_schema": {
+            "images": "list[file]"
+          },
+          "output_schema": {
+            "rows": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.93
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسوية كشف حساب شهري",
+          "input_schema": {
+            "bank_csv": "file",
+            "ledger_csv": "file"
+          },
+          "output_schema": {
+            "diff_report": "md"
+          },
+          "kpis": {
+            "recon_precision": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "حساب ضرائب ورسوم دورية",
+          "input_schema": {
+            "entries": "table"
+          },
+          "output_schema": {
+            "tax_sheet": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.99
+          },
+          "priority": 2
+        },
+        {
+          "name": "تنبيهات سيولة ونقدية",
+          "input_schema": {
+            "cashflow_csv": "file"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "alert_latency_s": 120
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقرير أرباح وخسائر",
+          "input_schema": {
+            "period": "str",
+            "journal": "table"
+          },
+          "output_schema": {
+            "pnl_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 50
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 1,
+      "name": "محامي",
+      "slug": "محامي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "توليد لائحة دعوى قياسية",
+          "input_schema": {
+            "client_name": "str",
+            "case_type": "enum[civil,penal,commercial]",
+            "facts": "text",
+            "evidence": "list[str]"
+          },
+          "output_schema": {
+            "petition_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "time_saved_min": 45,
+            "accuracy_target": 0.95
+          },
+          "priority": 1
+        },
+        {
+          "name": "تلخيص ملف دعوى مع مراجع RAG",
+          "input_schema": {
+            "pdfs": "list[file]"
+          },
+          "output_schema": {
+            "summary_md": "md",
+            "refs": "list[str]"
+          },
+          "kpis": {
+            "time_saved_min": 60,
+            "coverage": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "تذكير مواعيد الجلسات",
+          "input_schema": {
+            "calendar": "ics",
+            "cases": "list[str]"
+          },
+          "output_schema": {
+            "notifications": "list[event]"
+          },
+          "kpis": {
+            "miss_rate_max": 0.02
+          },
+          "priority": 2
+        },
+        {
+          "name": "توليد عقود قياسية",
+          "input_schema": {
+            "contract_type": "enum[lease,nda,sale]",
+            "parties": "list[str]",
+            "terms": "text"
+          },
+          "output_schema": {
+            "contract_doc": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 3
+        },
+        {
+          "name": "أرشفة وفهرسة القضايا",
+          "input_schema": {
+            "docs": "list[file]"
+          },
+          "output_schema": {
+            "index_id": "str"
+          },
+          "kpis": {
+            "retrieval@5": 0.9
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "crawler",
+          "tool_key": "crawler",
+          "config": {}
+        },
+        {
+          "type": "transcriber",
+          "tool_key": "transcriber",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 207,
+      "name": "محل بيع قطع تبديل سيارات جديدة",
+      "slug": "محل-بيع-قطع-تبديل-سيارات-جديدة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "جرد عبر باركود/فاتورة",
+          "input_schema": {
+            "images|invoices": "list[file]"
+          },
+          "output_schema": {
+            "stock_table": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.95
+          },
+          "priority": 1
+        },
+        {
+          "name": "اقتراح طلبية حسب الدوران",
+          "input_schema": {
+            "sales": "table",
+            "lead_times": "table"
+          },
+          "output_schema": {
+            "po_csv": "file"
+          },
+          "kpis": {
+            "fill_rate": 0.92
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسعير وفواتير",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "price_list": "table"
+          },
+          "kpis": {
+            "margin_min": 0.08
+          },
+          "priority": 2
+        },
+        {
+          "name": "تنبيهات نقص",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "كتالوج بحث داخلي",
+          "input_schema": {
+            "parts": "table"
+          },
+          "output_schema": {
+            "catalog_url": "url"
+          },
+          "kpis": {
+            "latency_s": 2
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 504,
+      "name": "محل دهانات/ديكور",
+      "slug": "محل-دهانات-ديكور",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "مزج ألوان وقوائم مواد",
+          "input_schema": {
+            "recipes": "table"
+          },
+          "output_schema": {
+            "mix_sheet": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "عروض وتسعير",
+          "input_schema": {
+            "rooms": "table",
+            "areas_m2": "number"
+          },
+          "output_schema": {
+            "quote_pdf": "pdf"
+          },
+          "kpis": {
+            "quote_accuracy": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "مخزون وتنبيهات",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.06
+          },
+          "priority": 2
+        },
+        {
+          "name": "جدولة عمال/مواقع",
+          "input_schema": {
+            "projects": "table"
+          },
+          "output_schema": {
+            "schedule_csv": "file"
+          },
+          "kpis": {
+            "on_time_rate": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير دخل/مصاريف",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "pnl_md": "md"
+          },
+          "kpis": {
+            "variance_max": 0.1
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 205,
+      "name": "محل صيانة سيارات",
+      "slug": "محل-صيانة-سيارات",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "إدخال مركبة وتاريخ أعطال",
+          "input_schema": {
+            "plate": "str",
+            "mileage": "number",
+            "complaint": "text"
+          },
+          "output_schema": {
+            "ticket_id": "str"
+          },
+          "kpis": {
+            "intake_time_s": 90
+          },
+          "priority": 1
+        },
+        {
+          "name": "خطة فحص قواعدية",
+          "input_schema": {
+            "symptoms": "list[str]"
+          },
+          "output_schema": {
+            "diagnostic_steps": "md"
+          },
+          "kpis": {
+            "first_fix_rate": 0.7
+          },
+          "priority": 2
+        },
+        {
+          "name": "قطع ومخزون",
+          "input_schema": {
+            "parts_csv": "file"
+          },
+          "output_schema": {
+            "reorder_list": "table"
+          },
+          "kpis": {
+            "sla_parts_days": 3
+          },
+          "priority": 2
+        },
+        {
+          "name": "إشعار جاهزية/تقدير تكلفة",
+          "input_schema": {
+            "ticket_id": "str"
+          },
+          "output_schema": {
+            "quote_pdf": "pdf"
+          },
+          "kpis": {
+            "quote_accuracy": 0.9
+          },
+          "priority": 3
+        },
+        {
+          "name": "فاتورة وختم",
+          "input_schema": {
+            "ticket_id": "str",
+            "parts_used": "table"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 100,
+      "name": "مخبر تحليل",
+      "slug": "مخبر-تحليل",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "إدخال نتائج فحوص آليًا من أجهزة/صور",
+          "input_schema": {
+            "device_csv|images": "list[file]"
+          },
+          "output_schema": {
+            "lab_rows": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.95
+          },
+          "priority": 1
+        },
+        {
+          "name": "توليد تقارير مخبرية PDF",
+          "input_schema": {
+            "lab_rows": "table"
+          },
+          "output_schema": {
+            "reports": "pdf"
+          },
+          "kpis": {
+            "format_compliance": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تنبيه نتائج حرجة",
+          "input_schema": {
+            "lab_rows": "table",
+            "thresholds": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "latency_min": 10
+          },
+          "priority": 2
+        },
+        {
+          "name": "فهرسة نتائج قديمة للبحث",
+          "input_schema": {
+            "pdfs": "list[file]"
+          },
+          "output_schema": {
+            "index_id": "str"
+          },
+          "kpis": {
+            "retrieval@5": 0.9
+          },
+          "priority": 3
+        },
+        {
+          "name": "لوحة مؤشرات يومية",
+          "input_schema": {
+            "rows": "table"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "uptime": 0.99
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 101,
+      "name": "مخبر تصوير أشعة",
+      "slug": "مخبر-تصوير-أشعة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "استخراج بيانات من تقارير DICOM/PDF",
+          "input_schema": {
+            "dicom|pdfs": "list[file]"
+          },
+          "output_schema": {
+            "meta_table": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "تلخيص تقرير شعاعي مبدئي",
+          "input_schema": {
+            "findings_text": "text"
+          },
+          "output_schema": {
+            "summary_md": "md"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 2
+        },
+        {
+          "name": "جدولة مواعيد وإشعارات",
+          "input_schema": {
+            "calendar": "ics"
+          },
+          "output_schema": {
+            "notifications": "list[event]"
+          },
+          "kpis": {
+            "no_show_reduction": 0.1
+          },
+          "priority": 2
+        },
+        {
+          "name": "فهرسة أرشيف صور",
+          "input_schema": {
+            "images": "list[file]"
+          },
+          "output_schema": {
+            "index_id": "str"
+          },
+          "kpis": {
+            "retrieval@10": 0.85
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقرير يومي تشغيل",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "ops_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 15
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 208,
+      "name": "مخبز/حلويات",
+      "slug": "مخبز-حلويات",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "خطة إنتاج يومية حسب الطلب",
+          "input_schema": {
+            "orders_csv": "file",
+            "recipes": "table"
+          },
+          "output_schema": {
+            "production_plan": "table"
+          },
+          "kpis": {
+            "waste_reduction": 0.15
+          },
+          "priority": 1
+        },
+        {
+          "name": "كلفة وصفة وهوامش",
+          "input_schema": {
+            "ingredients": "table",
+            "prices": "table"
+          },
+          "output_schema": {
+            "cost_sheet": "xlsx"
+          },
+          "kpis": {
+            "margin_target": 0.5
+          },
+          "priority": 1
+        },
+        {
+          "name": "مخزون مواد أولية وتنبيه",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "oos_rate_max": 0.06
+          },
+          "priority": 2
+        },
+        {
+          "name": "جدولة عاملين",
+          "input_schema": {
+            "staff": "table",
+            "constraints": "md"
+          },
+          "output_schema": {
+            "rota_csv": "file"
+          },
+          "kpis": {
+            "overtime_max_pct": 0.05
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقارير مبيعات يومية",
+          "input_schema": {
+            "pos_csv": "file"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 400,
+      "name": "مدير عام حكومي",
+      "slug": "مدير-عام-حكومي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "لوحة خطة/مشاريع ربع سنوية",
+          "input_schema": {
+            "portfolio": "table",
+            "kpis": "table"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 1
+        },
+        {
+          "name": "ملخصات تنفيذ أسبوعية",
+          "input_schema": {
+            "notes": "text"
+          },
+          "output_schema": {
+            "status_md": "md"
+          },
+          "kpis": {
+            "stakeholder_satisfaction": 0.85
+          },
+          "priority": 1
+        },
+        {
+          "name": "تحليل مخاطر وقرارات",
+          "input_schema": {
+            "risks_md": "md"
+          },
+          "output_schema": {
+            "register_csv": "file"
+          },
+          "kpis": {
+            "coverage": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG لوائح/تعاميم",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تذكير مهام ومدد نظامية",
+          "input_schema": {
+            "calendar": "ics"
+          },
+          "output_schema": {
+            "events": "list[event]"
+          },
+          "kpis": {
+            "miss_rate_max": 0.02
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 7,
+      "name": "مدير مشاريع",
+      "slug": "مدير-مشاريع",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تفكيك المتسلمات لخطة مهام",
+          "input_schema": {
+            "deliverables": "list[str]"
+          },
+          "output_schema": {
+            "workplan_csv": "file"
+          },
+          "kpis": {
+            "wbs_quality": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "لوحة متابعة (ريال تايم)",
+          "input_schema": {
+            "events": "stream"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 1
+        },
+        {
+          "name": "تحليل مخاطر آلي",
+          "input_schema": {
+            "risks_md": "md"
+          },
+          "output_schema": {
+            "register_csv": "file"
+          },
+          "kpis": {
+            "coverage": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "تحديث حالة أسبوعي",
+          "input_schema": {
+            "notes": "text"
+          },
+          "output_schema": {
+            "status_md": "md"
+          },
+          "kpis": {
+            "stakeholder_satisfaction": 0.8
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقدير موارد وسيناريوهات",
+          "input_schema": {
+            "backlog": "table"
+          },
+          "output_schema": {
+            "whatif_xlsx": "xlsx"
+          },
+          "kpis": {
+            "forecast_mape": 0.2
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 307,
+      "name": "مركز تعليمي صغير",
+      "slug": "مركز-تعليمي-صغير",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "جداول دروس ومدرسين",
+          "input_schema": {
+            "courses": "table",
+            "instructors": "table"
+          },
+          "output_schema": {
+            "schedule_csv": "file"
+          },
+          "kpis": {
+            "conflicts_max": 0
+          },
+          "priority": 1
+        },
+        {
+          "name": "حضور ودفعات",
+          "input_schema": {
+            "roster": "table",
+            "payments": "table"
+          },
+          "output_schema": {
+            "balance_table": "table"
+          },
+          "kpis": {
+            "arrears_rate_max": 0.1
+          },
+          "priority": 1
+        },
+        {
+          "name": "محتوى درسي وقوالب PDF",
+          "input_schema": {
+            "syllabus_md": "md"
+          },
+          "output_schema": {
+            "handouts_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 2
+        },
+        {
+          "name": "استبيانات جودة وتعليقات",
+          "input_schema": {
+            "surveys": "table"
+          },
+          "output_schema": {
+            "insights_md": "md"
+          },
+          "kpis": {
+            "satisfaction_target": 0.85
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقارير شهرية",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 506,
+      "name": "مركز نت/طباعة",
+      "slug": "مركز-نت-طباعة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "طباعة من ملفات وقوائم أسعار",
+          "input_schema": {
+            "jobs": "table"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 1
+        },
+        {
+          "name": "إدارة أجهزة/استهلاك",
+          "input_schema": {
+            "devices": "table"
+          },
+          "output_schema": {
+            "status_md": "md"
+          },
+          "kpis": {
+            "uptime": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "مسح ضوئي و OCR",
+          "input_schema": {
+            "images": "list[file]"
+          },
+          "output_schema": {
+            "rows": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.95
+          },
+          "priority": 2
+        },
+        {
+          "name": "حجوزات محطات",
+          "input_schema": {
+            "calendar": "ics"
+          },
+          "output_schema": {
+            "events": "list[event]"
+          },
+          "kpis": {
+            "utilization": 0.8
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير مالية",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 507,
+      "name": "مزوّد خدمات إنترنت (WISP)",
+      "slug": "مزوّد-خدمات-إنترنت-wisp",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "إدارة مشتركين وخطط",
+          "input_schema": {
+            "subs": "table",
+            "plans": "table"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 1
+        },
+        {
+          "name": "تنبيهات أعطال/انقطاع",
+          "input_schema": {
+            "events": "stream"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "mttr_hours": 6
+          },
+          "priority": 1
+        },
+        {
+          "name": "جدولة تركيب وصيانة",
+          "input_schema": {
+            "tickets": "table"
+          },
+          "output_schema": {
+            "schedule_csv": "file"
+          },
+          "kpis": {
+            "on_time_rate": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "حساب استخدام وفواتير",
+          "input_schema": {
+            "usage": "table"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG إعدادات/لوائح اتصالات",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 10,
+      "name": "مطعم",
+      "slug": "مطعم",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "قائمة مشتريات يومية",
+          "input_schema": {
+            "menu": "list[str]",
+            "sales_csv": "file"
+          },
+          "output_schema": {
+            "shopping_list": "table"
+          },
+          "kpis": {
+            "waste_reduction": 0.15
+          },
+          "priority": 1
+        },
+        {
+          "name": "جدولة نوبات وعمالة",
+          "input_schema": {
+            "staff": "table",
+            "constraints": "md"
+          },
+          "output_schema": {
+            "rota_csv": "file"
+          },
+          "kpis": {
+            "overtime_max_pct": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "تحليل تكاليف طبق",
+          "input_schema": {
+            "recipe": "table",
+            "prices": "table"
+          },
+          "output_schema": {
+            "cost_sheet": "xlsx"
+          },
+          "kpis": {
+            "margin_target": 0.6
+          },
+          "priority": 2
+        },
+        {
+          "name": "تعليقات العملاء وتحليلها",
+          "input_schema": {
+            "reviews_csv": "file"
+          },
+          "output_schema": {
+            "insights_md": "md"
+          },
+          "kpis": {
+            "sentiment_f1": 0.85
+          },
+          "priority": 3
+        },
+        {
+          "name": "لوحة مبيعات يومية",
+          "input_schema": {
+            "pos": "file"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "latency_s": 10
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 209,
+      "name": "معمل ألبان/أجبان صغير",
+      "slug": "معمل-ألبان-أجبان-صغير",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تتبّع دفعات الحليب",
+          "input_schema": {
+            "batch_csv": "file"
+          },
+          "output_schema": {
+            "trace_table": "table"
+          },
+          "kpis": {
+            "traceability": 1.0
+          },
+          "priority": 1
+        },
+        {
+          "name": "خطط إنتاج وأوزان",
+          "input_schema": {
+            "orders": "table",
+            "yields": "table"
+          },
+          "output_schema": {
+            "plan_csv": "file"
+          },
+          "kpis": {
+            "yield_target": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "ضبط جودة بسيط",
+          "input_schema": {
+            "lab_rows": "table"
+          },
+          "output_schema": {
+            "qc_alerts": "list[str]"
+          },
+          "kpis": {
+            "nonconform_rate_max": 0.03
+          },
+          "priority": 2
+        },
+        {
+          "name": "تكاليف وهامش",
+          "input_schema": {
+            "ingredients": "table",
+            "energy": "table"
+          },
+          "output_schema": {
+            "cost_sheet": "xlsx"
+          },
+          "kpis": {
+            "margin_target": 0.25
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقارير شحن/مبيعات",
+          "input_schema": {
+            "sales": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 505,
+      "name": "مغسلة ملابس",
+      "slug": "مغسلة-ملابس",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "استلام طلب وغسل/كي",
+          "input_schema": {
+            "items": "table",
+            "customer": "str"
+          },
+          "output_schema": {
+            "ticket_id": "str"
+          },
+          "kpis": {
+            "intake_time_s": 60
+          },
+          "priority": 1
+        },
+        {
+          "name": "جدولة تسليم/استلام",
+          "input_schema": {
+            "calendar": "ics"
+          },
+          "output_schema": {
+            "events": "list[event]"
+          },
+          "kpis": {
+            "no_show_reduction": 0.1
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسعير حسب النوع/الوزن",
+          "input_schema": {
+            "items": "table"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 2
+        },
+        {
+          "name": "مخزون منظفات واستهلاك",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "reorder_list": "table"
+          },
+          "kpis": {
+            "oos_rate_max": 0.06
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير يومية",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 15
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 501,
+      "name": "مكتب حوالات/صرافة مرخّص",
+      "slug": "مكتب-حوالات-صرافة-مرخّص",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "KYC من صور الهويات",
+          "input_schema": {
+            "id_images": "list[file]"
+          },
+          "output_schema": {
+            "kyc_rows": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.95
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسجيل حوالة وإيصال",
+          "input_schema": {
+            "transfer_form": "md"
+          },
+          "output_schema": {
+            "receipt_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 1
+        },
+        {
+          "name": "تنبيهات حدود/امتثال",
+          "input_schema": {
+            "transactions": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "false_positive_max": 0.1
+          },
+          "priority": 2
+        },
+        {
+          "name": "أسعار صرف آلية (API)",
+          "input_schema": {
+            "providers": "table"
+          },
+          "output_schema": {
+            "rates_table": "table"
+          },
+          "kpis": {
+            "uptime": 0.99
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقرير امتثال يومي",
+          "input_schema": {
+            "kyc_rows": "table",
+            "transactions": "table"
+          },
+          "output_schema": {
+            "compliance_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 409,
+      "name": "مكتب سياحة وسفر",
+      "slug": "مكتب-سياحة-وسفر",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "حجز وإصدار تذاكر",
+          "input_schema": {
+            "requests": "table"
+          },
+          "output_schema": {
+            "tickets_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 1
+        },
+        {
+          "name": "إدارة عملاء وتذكير رحلات",
+          "input_schema": {
+            "customers": "table"
+          },
+          "output_schema": {
+            "events": "list[event]"
+          },
+          "kpis": {
+            "retention_lift": 0.1
+          },
+          "priority": 1
+        },
+        {
+          "name": "تكامل مزودي GDS/API",
+          "input_schema": {
+            "suppliers": "table"
+          },
+          "output_schema": {
+            "sync_status": "md"
+          },
+          "kpis": {
+            "uptime": 0.99
+          },
+          "priority": 2
+        },
+        {
+          "name": "تحليل مبيعات القنوات",
+          "input_schema": {
+            "sales": "table"
+          },
+          "output_schema": {
+            "insights_md": "md"
+          },
+          "kpis": {
+            "lift_expected": 0.1
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير مالية شهرية",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 309,
+      "name": "مكتب شحن",
+      "slug": "مكتب-شحن",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "إنشاء شحنات وبوالص",
+          "input_schema": {
+            "sender": "str",
+            "receiver": "str",
+            "items": "table"
+          },
+          "output_schema": {
+            "awb_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 1
+        },
+        {
+          "name": "تتبّع وتتالي حالات",
+          "input_schema": {
+            "events": "stream"
+          },
+          "output_schema": {
+            "tracking_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 1
+        },
+        {
+          "name": "حساب تكاليف وأوزان حجمية",
+          "input_schema": {
+            "dims": "table",
+            "zones": "table"
+          },
+          "output_schema": {
+            "cost_sheet": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.99
+          },
+          "priority": 2
+        },
+        {
+          "name": "تنبيهات تأخير/جمارك",
+          "input_schema": {
+            "tracking": "table"
+          },
+          "output_schema": {
+            "alerts": "list[str]"
+          },
+          "kpis": {
+            "sla_violation_max": 0.02
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير شهرية",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 4,
+      "name": "مهندس مدني",
+      "slug": "مهندس-مدني",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "حساب كميات بسيطة",
+          "input_schema": {
+            "boq_items": "table"
+          },
+          "output_schema": {
+            "calc_sheet": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "تلخيص مخططات PDF",
+          "input_schema": {
+            "drawings": "list[file]"
+          },
+          "output_schema": {
+            "summary_md": "md"
+          },
+          "kpis": {
+            "coverage": 0.85
+          },
+          "priority": 2
+        },
+        {
+          "name": "خطة صب وجدولة",
+          "input_schema": {
+            "tasks": "table"
+          },
+          "output_schema": {
+            "gantt_csv": "file"
+          },
+          "kpis": {
+            "slippage_max_days": 1
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقرير يومي للموقع",
+          "input_schema": {
+            "notes": "text",
+            "photos": "list[file]"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 30
+          },
+          "priority": 3
+        },
+        {
+          "name": "تحقق بسيط من مقاومة مكونات",
+          "input_schema": {
+            "inputs": "table"
+          },
+          "output_schema": {
+            "pass_fail": "bool"
+          },
+          "kpis": {
+            "rule_coverage": 0.9
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 102,
+      "name": "مهندس معماري",
+      "slug": "مهندس-معماري",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تلخيص مخططات مع قيود تنظيمية",
+          "input_schema": {
+            "drawings": "list[file]",
+            "codes": "list[file]"
+          },
+          "output_schema": {
+            "summary_md": "md"
+          },
+          "kpis": {
+            "coverage": 0.85
+          },
+          "priority": 1
+        },
+        {
+          "name": "حساب مساحات ومطابقات بسيطة",
+          "input_schema": {
+            "rooms_csv": "file"
+          },
+          "output_schema": {
+            "area_sheet": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "نمذجة متطلبات عميل إلى برنامج مساحات",
+          "input_schema": {
+            "brief_md": "md"
+          },
+          "output_schema": {
+            "program_csv": "file"
+          },
+          "kpis": {
+            "match_score": 0.8
+          },
+          "priority": 2
+        },
+        {
+          "name": "توليد جداول مواد أولية",
+          "input_schema": {
+            "boq_items": "table"
+          },
+          "output_schema": {
+            "boq_xlsx": "xlsx"
+          },
+          "kpis": {
+            "completeness": 0.9
+          },
+          "priority": 3
+        },
+        {
+          "name": "تقرير تقديم بلدية",
+          "input_schema": {
+            "summary": "md"
+          },
+          "output_schema": {
+            "permit_pdf": "pdf"
+          },
+          "kpis": {
+            "format_ok": 1.0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 401,
+      "name": "موظف حكومي",
+      "slug": "موظف-حكومي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "إدخال معاملات نمطية من صور/نصوص",
+          "input_schema": {
+            "forms_images": "list[file]"
+          },
+          "output_schema": {
+            "rows": "table"
+          },
+          "kpis": {
+            "extraction_f1": 0.95
+          },
+          "priority": 1
+        },
+        {
+          "name": "توليد مراسلات قياسية",
+          "input_schema": {
+            "case_md": "md"
+          },
+          "output_schema": {
+            "letter_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 1
+        },
+        {
+          "name": "طوابير وتتبّع دور",
+          "input_schema": {
+            "tickets": "table"
+          },
+          "output_schema": {
+            "queue_view_url": "url"
+          },
+          "kpis": {
+            "wait_time_reduction": 0.15
+          },
+          "priority": 2
+        },
+        {
+          "name": "RAG أدلة خدمة المواطنين",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير يومية",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "report_pdf": "pdf"
+          },
+          "kpis": {
+            "time_saved_min": 20
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "ocr",
+          "tool_key": "ocr",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 304,
+      "name": "ورشة ألمنيوم",
+      "slug": "ورشة-ألمنيوم",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "حصر قطاعات ومقاطع",
+          "input_schema": {
+            "windows_doors": "table"
+          },
+          "output_schema": {
+            "cut_list": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسعير وترحيل أقطاعات",
+          "input_schema": {
+            "cut_list": "file",
+            "prices": "table"
+          },
+          "output_schema": {
+            "quote_pdf": "pdf"
+          },
+          "kpis": {
+            "quote_accuracy": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "جدولة تركيب",
+          "input_schema": {
+            "projects": "table"
+          },
+          "output_schema": {
+            "schedule_csv": "file"
+          },
+          "kpis": {
+            "on_time_rate": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "متابعة طلبات زجاج/اكسسوارات",
+          "input_schema": {
+            "po": "table"
+          },
+          "output_schema": {
+            "status_md": "md"
+          },
+          "kpis": {
+            "sla_days": 3
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير تقدم ومصاريف",
+          "input_schema": {
+            "expenses": "table",
+            "progress": "table"
+          },
+          "output_schema": {
+            "pnl_md": "md"
+          },
+          "kpis": {
+            "variance_max": 0.1
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 509,
+      "name": "ورشة حدادة",
+      "slug": "ورشة-حدادة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تفصيل مقاطع وحديد تسليح",
+          "input_schema": {
+            "drawings": "list[file]"
+          },
+          "output_schema": {
+            "cut_list": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسعير ولحام/دهان",
+          "input_schema": {
+            "materials": "table",
+            "labor": "table"
+          },
+          "output_schema": {
+            "quote_pdf": "pdf"
+          },
+          "kpis": {
+            "quote_accuracy": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "جدولة تصنيع/تركيب",
+          "input_schema": {
+            "jobs": "table"
+          },
+          "output_schema": {
+            "schedule_csv": "file"
+          },
+          "kpis": {
+            "on_time_rate": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "فحص جودة وسلامة",
+          "input_schema": {
+            "checklist": "table"
+          },
+          "output_schema": {
+            "qc_report": "pdf"
+          },
+          "kpis": {
+            "defect_rate_max": 0.03
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير دخل/مصاريف",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "pnl_md": "md"
+          },
+          "kpis": {
+            "variance_max": 0.1
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 303,
+      "name": "ورشة خياطة",
+      "slug": "ورشة-خياطة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "تخطيط قصّ وانتاجية",
+          "input_schema": {
+            "orders": "table",
+            "sizes": "table"
+          },
+          "output_schema": {
+            "cut_plan": "table"
+          },
+          "kpis": {
+            "waste_reduction": 0.1
+          },
+          "priority": 1
+        },
+        {
+          "name": "جداول تشغيل آلات/عمال",
+          "input_schema": {
+            "machines": "table",
+            "staff": "table"
+          },
+          "output_schema": {
+            "rota_csv": "file"
+          },
+          "kpis": {
+            "uptime": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "فحص جودة دفعات",
+          "input_schema": {
+            "qc_checks": "table"
+          },
+          "output_schema": {
+            "qc_report": "pdf"
+          },
+          "kpis": {
+            "defect_rate_max": 0.03
+          },
+          "priority": 2
+        },
+        {
+          "name": "إدارة خامات/ملحقات",
+          "input_schema": {
+            "stock": "table"
+          },
+          "output_schema": {
+            "reorder_list": "table"
+          },
+          "kpis": {
+            "oos_rate_max": 0.05
+          },
+          "priority": 2
+        },
+        {
+          "name": "فواتير وتسليم",
+          "input_schema": {
+            "deliveries": "table"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 204,
+      "name": "ورشة صيانة حواسيب",
+      "slug": "ورشة-صيانة-حواسيب",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "استلام جهاز وتذكرة",
+          "input_schema": {
+            "serial": "str",
+            "issue": "text"
+          },
+          "output_schema": {
+            "ticket_id": "str"
+          },
+          "kpis": {
+            "intake_time_s": 60
+          },
+          "priority": 1
+        },
+        {
+          "name": "تشخيص قواعدي حسب العطل",
+          "input_schema": {
+            "symptoms": "list[str]"
+          },
+          "output_schema": {
+            "checks": "list[str]"
+          },
+          "kpis": {
+            "first_fix_rate": 0.7
+          },
+          "priority": 2
+        },
+        {
+          "name": "إدارة مخزون قطع",
+          "input_schema": {
+            "parts_csv": "file"
+          },
+          "output_schema": {
+            "reorder_list": "table"
+          },
+          "kpis": {
+            "sla_parts_days": 2
+          },
+          "priority": 2
+        },
+        {
+          "name": "إشعار جاهزية",
+          "input_schema": {
+            "ticket_id": "str"
+          },
+          "output_schema": {
+            "notification": "str"
+          },
+          "kpis": {
+            "notify_latency_min": 5
+          },
+          "priority": 3
+        },
+        {
+          "name": "فاتورة صيانة",
+          "input_schema": {
+            "ticket_id": "str",
+            "parts_used": "table"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 9,
+      "name": "ورشة صيانة موبايل",
+      "slug": "ورشة-صيانة-موبايل",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "استقبال جهاز وتوليد بطاقة",
+          "input_schema": {
+            "imei": "str",
+            "issue": "text"
+          },
+          "output_schema": {
+            "ticket_id": "str"
+          },
+          "kpis": {
+            "intake_time_s": 60
+          },
+          "priority": 1
+        },
+        {
+          "name": "تشخيص إرشادي (قواعد)",
+          "input_schema": {
+            "symptoms": "list[str]"
+          },
+          "output_schema": {
+            "checks": "list[str]"
+          },
+          "kpis": {
+            "first_fix_rate": 0.7
+          },
+          "priority": 2
+        },
+        {
+          "name": "قطع الغيار والمخزون",
+          "input_schema": {
+            "parts_csv": "file"
+          },
+          "output_schema": {
+            "reorder_list": "table"
+          },
+          "kpis": {
+            "sla_parts_days": 2
+          },
+          "priority": 2
+        },
+        {
+          "name": "إشعار جاهزية للعميل",
+          "input_schema": {
+            "ticket_id": "str"
+          },
+          "output_schema": {
+            "notification": "str"
+          },
+          "kpis": {
+            "notify_latency_min": 5
+          },
+          "priority": 3
+        },
+        {
+          "name": "فاتورة صيانة قياسية",
+          "input_schema": {
+            "ticket_id": "str",
+            "parts_used": "table"
+          },
+          "output_schema": {
+            "invoice_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "solver",
+          "tool_key": "solver",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 508,
+      "name": "ورشة نجارة",
+      "slug": "ورشة-نجارة",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "قصّ و BOM أخشاب",
+          "input_schema": {
+            "orders": "table"
+          },
+          "output_schema": {
+            "cut_list": "xlsx"
+          },
+          "kpis": {
+            "calc_accuracy": 0.98
+          },
+          "priority": 1
+        },
+        {
+          "name": "تسعير مشروعات نجارة",
+          "input_schema": {
+            "materials": "table",
+            "labor": "table"
+          },
+          "output_schema": {
+            "quote_pdf": "pdf"
+          },
+          "kpis": {
+            "quote_accuracy": 0.9
+          },
+          "priority": 1
+        },
+        {
+          "name": "جدولة ورشة/تركيب",
+          "input_schema": {
+            "jobs": "table"
+          },
+          "output_schema": {
+            "schedule_csv": "file"
+          },
+          "kpis": {
+            "on_time_rate": 0.9
+          },
+          "priority": 2
+        },
+        {
+          "name": "فحص جودة وتسليم",
+          "input_schema": {
+            "checklist": "table"
+          },
+          "output_schema": {
+            "qc_report": "pdf"
+          },
+          "kpis": {
+            "defect_rate_max": 0.03
+          },
+          "priority": 2
+        },
+        {
+          "name": "تقارير دخل/مصاريف",
+          "input_schema": {
+            "ops": "table"
+          },
+          "output_schema": {
+            "pnl_md": "md"
+          },
+          "kpis": {
+            "variance_max": 0.1
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "api",
+          "tool_key": "api",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    },
+    {
+      "id": 402,
+      "name": "وزير حكومي",
+      "slug": "وزير-حكومي",
+      "domain": "سوريا",
+      "status": "ready",
+      "automation_target_min": 0.7,
+      "automation_target_max": 0.8,
+      "tasks": [
+        {
+          "name": "ملخص سياسات وتنفيذي أسبوعي",
+          "input_schema": {
+            "inputs_md": "md"
+          },
+          "output_schema": {
+            "brief_md": "md"
+          },
+          "kpis": {
+            "time_saved_min": 40
+          },
+          "priority": 1
+        },
+        {
+          "name": "متابعة مؤشرات قطاع",
+          "input_schema": {
+            "kpis": "table"
+          },
+          "output_schema": {
+            "dashboard_url": "url"
+          },
+          "kpis": {
+            "latency_s": 5
+          },
+          "priority": 1
+        },
+        {
+          "name": "RAG على قوانين/اتفاقيات",
+          "input_schema": {
+            "query": "text"
+          },
+          "output_schema": {
+            "answer_md": "md",
+            "citations": "list[str]"
+          },
+          "kpis": {
+            "citation_rate": 1.0
+          },
+          "priority": 2
+        },
+        {
+          "name": "تخطيط موازنات مبسّط",
+          "input_schema": {
+            "allocations": "table"
+          },
+          "output_schema": {
+            "whatif_xlsx": "xlsx"
+          },
+          "kpis": {
+            "forecast_mape": 0.2
+          },
+          "priority": 2
+        },
+        {
+          "name": "مراسلات رسمية PDF",
+          "input_schema": {
+            "brief_md": "md"
+          },
+          "output_schema": {
+            "letter_pdf": "pdf"
+          },
+          "kpis": {
+            "errors_max": 0
+          },
+          "priority": 3
+        }
+      ],
+      "tools": [
+        {
+          "type": "planner",
+          "tool_key": "planner",
+          "config": {}
+        },
+        {
+          "type": "notifier",
+          "tool_key": "notifier",
+          "config": {}
+        },
+        {
+          "type": "etl",
+          "tool_key": "etl",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        },
+        {
+          "type": "rag",
+          "tool_key": "rag_local",
+          "config": {
+            "index_scope": "local"
+          }
+        },
+        {
+          "type": "calc",
+          "tool_key": "calc",
+          "config": {}
+        },
+        {
+          "type": "generator",
+          "tool_key": "generator",
+          "config": {}
+        }
+      ],
+      "kpis": {
+        "success_rate_min": 0.9
+      }
+    }
+  ]
+}
