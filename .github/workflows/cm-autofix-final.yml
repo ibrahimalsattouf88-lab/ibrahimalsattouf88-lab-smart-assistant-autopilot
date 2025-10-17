@@ -1,21 +1,29 @@
-name: Codemagic AutoFix (final)
-
+name: Codemagic AutoBuild (final)
 on:
   workflow_dispatch:
 
 permissions:
   contents: read
 
-concurrency:
-  group: cm-autofix-final
-  cancel-in-progress: false
-
 jobs:
-  smart:
-    name: Build smart-assistant-app on Codemagic
+  verify-codemagic-token:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Codemagic (smart)
+      - name: Check token can list apps
+        run: |
+          set -e
+          curl -fsS -H "x-auth-token: ${{ secrets.CODEMAGIC_TOKEN }}" \
+               https://api.codemagic.io/apps >/dev/null
+          echo "Token OK"
+
+  smart:
+    name: Build smart-assistant-app on Codemagic
+    needs: verify-codemagic-token
+    runs-on: ubuntu-latest
+    steps:
+      # الطريقة الرسمية باستخدام الأكشن
+      - name: Trigger via Action (smart)
+        id: act
         uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
         with:
           token: ${{ secrets.CODEMAGIC_TOKEN }}
@@ -23,15 +31,45 @@ jobs:
           workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_SMART }}
           branch: main
 
+      # باك أب: استدعاء مباشر لـ API (يساعد لو فشل الـaction بسبب صيغة المعطيات)
+      - name: Fallback trigger via API (smart) if Action failed
+        if: failure()
+        run: |
+          set -e
+          data=$(jq -n \
+            --arg appId "${{ secrets.CODEMAGIC_APP_SMART }}" \
+            --arg workflowId "${{ secrets.CODEMAGIC_WORKFLOW_SMART }}" \
+            --arg branch "main" \
+            '{appId:$appId, workflowId:$workflowId, branch:$branch}')
+          curl -fsS -X POST https://api.codemagic.io/builds \
+               -H "Content-Type: application/json" \
+               -H "x-auth-token: ${{ secrets.CODEMAGIC_TOKEN }}" \
+               -d "$data"
+
   panel:
     name: Build control-panel-app on Codemagic
-    runs-on: ubuntu-latest
     needs: smart
+    runs-on: ubuntu-latest
     steps:
-      - name: Trigger Codemagic (panel)
+      - name: Trigger via Action (panel)
+        id: act
         uses: codemagic-ci-cd/trigger-codemagic-workflow-action@v2.0.0
         with:
           token: ${{ secrets.CODEMAGIC_TOKEN }}
           app-id: ${{ secrets.CODEMAGIC_APP_PANEL }}
           workflow-id: ${{ secrets.CODEMAGIC_WORKFLOW_PANEL }}
           branch: main
+
+      - name: Fallback trigger via API (panel) if Action failed
+        if: failure()
+        run: |
+          set -e
+          data=$(jq -n \
+            --arg appId "${{ secrets.CODEMAGIC_APP_PANEL }}" \
+            --arg workflowId "${{ secrets.CODEMAGIC_WORKFLOW_PANEL }}" \
+            --arg branch "main" \
+            '{appId:$appId, workflowId:$workflowId, branch:$branch}')
+          curl -fsS -X POST https://api.codemagic.io/builds \
+               -H "Content-Type: application/json" \
+               -H "x-auth-token: ${{ secrets.CODEMAGIC_TOKEN }}" \
+               -d "$data"
